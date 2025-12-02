@@ -5,6 +5,8 @@ export interface Service {
   title: string;
   description: string;
   icon: LucideIcon;
+  features: string[];
+  link?: string;
 }
 
 export interface Project {

@@ -1,8 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useTheme } from '../context/ThemeContext';
 
 const ThreeBackground: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+
+  // Refs to store material/object references to update them when theme changes
+  const coreMaterialRef = useRef<THREE.MeshBasicMaterial | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -20,15 +25,13 @@ const ThreeBackground: React.FC = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
 
-    // Group for mouse interaction (Tilting)
-    // We rotate the group for mouse interaction, and the sphere inside for constant spin
-    // This prevents the "fighting" between interpolation and constant rotation
+    // Group for mouse interaction
     const mainGroup = new THREE.Group();
     scene.add(mainGroup);
 
     // Objects
     
-    // 1. Central Wireframe Sphere (Icosahedron)
+    // 1. Central Wireframe Sphere
     const geometry = new THREE.IcosahedronGeometry(2, 1);
     const material = new THREE.MeshPhongMaterial({ 
         color: 0x4b6bfb, 
@@ -41,48 +44,49 @@ const ThreeBackground: React.FC = () => {
     const sphere = new THREE.Mesh(geometry, material);
     mainGroup.add(sphere);
 
-    // 2. Inner Solid Core (Subtle background blocker)
+    // 2. Inner Solid Core (Background blocker)
     const coreGeometry = new THREE.IcosahedronGeometry(1.8, 0);
+    // Initial color set based on current theme, but will be updated in separate effect
+    const initialCoreColor = theme === 'dark' ? 0x050816 : 0xf9fafb; 
     const coreMaterial = new THREE.MeshBasicMaterial({
-        color: 0x050816, 
+        color: initialCoreColor, 
         transparent: true,
         opacity: 0.9
     });
+    coreMaterialRef.current = coreMaterial;
+    
     const core = new THREE.Mesh(coreGeometry, coreMaterial);
     mainGroup.add(core);
 
-
-    // 3. Particle Field (Outside the tilting group for depth parallax)
+    // 3. Particle Field
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 400; // Reduced count
+    const particlesCount = 400;
     const posArray = new Float32Array(particlesCount * 3);
 
     for(let i = 0; i < particlesCount * 3; i++) {
-        // Spread particles further out
         const r = 4 + Math.random() * 8; 
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
         
-        posArray[i] = r * Math.sin(phi) * Math.cos(theta); // x
-        posArray[i + 1] = r * Math.sin(phi) * Math.sin(theta); // y
-        posArray[i + 2] = r * Math.cos(phi); // z
+        posArray[i] = r * Math.sin(phi) * Math.cos(theta);
+        posArray[i + 1] = r * Math.sin(phi) * Math.sin(theta);
+        posArray[i + 2] = r * Math.cos(phi);
     }
 
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     const particlesMaterial = new THREE.PointsMaterial({
         size: 0.015,
-        color: 0x8b5cf6, // Violet accent
+        color: 0x8b5cf6,
         transparent: true,
-        opacity: 0.3, // Reduced opacity
+        opacity: 0.3,
     });
     
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particlesMesh);
 
-    // Mouse Interaction Variables
+    // Mouse Interaction
     let mouseX = 0;
     let mouseY = 0;
-    
     let windowHalfX = window.innerWidth / 2;
     let windowHalfY = window.innerHeight / 2;
 
@@ -97,23 +101,18 @@ const ThreeBackground: React.FC = () => {
     let animationFrameId: number;
 
     const animate = () => {
-        // 1. Tilt the main group based on mouse position
-        // Reduced sensitivity (0.0002) and smooth damping (0.05)
         const targetRotationY = mouseX * 0.0002;
         const targetRotationX = mouseY * 0.0002;
         
         mainGroup.rotation.y += 0.05 * (targetRotationY - mainGroup.rotation.y);
         mainGroup.rotation.x += 0.05 * (targetRotationX - mainGroup.rotation.x);
 
-        // 2. Constant slow spin of the object itself
         sphere.rotation.y += 0.001; 
-        sphere.rotation.z += 0.0005; // Slight Z-axis rotation for organic feel
+        sphere.rotation.z += 0.0005;
         
-        // Sync core with sphere
         core.rotation.y = sphere.rotation.y;
         core.rotation.z = sphere.rotation.z;
 
-        // 3. Particles drift slowly in background
         particlesMesh.rotation.y = Date.now() * 0.00005;
 
         renderer.render(scene, camera);
@@ -122,21 +121,17 @@ const ThreeBackground: React.FC = () => {
 
     animate();
 
-    // Resize Handler
     const handleResize = () => {
         const width = window.innerWidth;
         const height = window.innerHeight;
-        
         windowHalfX = width / 2;
         windowHalfY = height / 2;
-        
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
         renderer.setSize(width, height);
     };
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
     return () => {
         cancelAnimationFrame(animationFrameId);
         document.removeEventListener('mousemove', onDocumentMouseMove);
@@ -146,7 +141,6 @@ const ThreeBackground: React.FC = () => {
             containerRef.current.removeChild(renderer.domElement);
         }
         
-        // Dispose Three.js resources
         geometry.dispose();
         material.dispose();
         coreGeometry.dispose();
@@ -155,7 +149,15 @@ const ThreeBackground: React.FC = () => {
         particlesMaterial.dispose();
         renderer.dispose();
     };
-  }, []);
+  }, []); // Run once on mount
+
+  // Effect to update colors when theme changes
+  useEffect(() => {
+    if (coreMaterialRef.current) {
+        // Update core color to match background (Gray-50 for light, Navy-900 for dark)
+        coreMaterialRef.current.color.setHex(theme === 'dark' ? 0x050816 : 0xf9fafb);
+    }
+  }, [theme]);
 
   return <div ref={containerRef} className="absolute inset-0 z-0 pointer-events-none opacity-70" />;
 };

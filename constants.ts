@@ -4,7 +4,9 @@ import {
   Box, 
   ShoppingCart, 
   LayoutDashboard, 
-  Smartphone 
+  Smartphone,
+  Globe,
+  Lock
 } from 'lucide-react';
 import { Service, Project, TeamMember, PricingTier, Testimonial } from './types';
 
@@ -13,37 +15,99 @@ export const SERVICES: Service[] = [
     id: 'web-dev',
     title: 'Full-Stack Web Dev',
     description: 'Scalable, secure, and high-performance web applications built with modern frameworks.',
-    icon: Code
+    icon: Code,
+    features: [
+      'Modern Frameworks (React/Next.js)',
+      'Secure Backend Architecture',
+      'API Integration',
+      'Performance Optimization'
+    ]
+  },
+  {
+    id: 'domain',
+    title: 'Domain Registration',
+    description: 'Find and register your perfect domain name. We handle DNS and configuration.',
+    icon: Globe,
+    link: 'https://indiadomainbank.com/',
+    features: [
+      'TLD Registration',
+      'DNS Management',
+      'Whois Privacy',
+      'Instant Setup'
+    ]
+  },
+  {
+    id: 'ssl',
+    title: 'SSL Certificates',
+    description: 'Encrypt your website traffic and build trust with visitors using premium SSLs.',
+    icon: Lock,
+    link: 'https://indiadomainbank.com/',
+    features: [
+      '256-bit Encryption',
+      'Green Bar Trust',
+      'SEO Boost',
+      'Fast Issuance'
+    ]
   },
   {
     id: 'ui-ux',
     title: 'Modern UI/UX Design',
     description: 'User-centric designs that look stunning and provide seamless experiences across devices.',
-    icon: Palette
+    icon: Palette,
+    features: [
+      'User Research & Personas',
+      'Wireframing & Prototyping',
+      'Interactive Design Systems',
+      'Usability Testing'
+    ]
   },
   {
     id: '3d-web',
     title: '3D & Interactive',
     description: 'Immersive 3D experiences using WebGL and Three.js to captivate your audience.',
-    icon: Box
+    icon: Box,
+    features: [
+      'WebGL / Three.js Implementation',
+      'Interactive 3D Models',
+      'Performance Optimization',
+      'Custom Shaders & Effects'
+    ]
   },
   {
     id: 'ecommerce',
     title: 'E-Commerce Solutions',
     description: 'Custom online stores optimized for conversions, featuring secure payment integrations.',
-    icon: ShoppingCart
+    icon: ShoppingCart,
+    features: [
+      'Secure Payment Gateways',
+      'Inventory Management',
+      'Conversion Rate Optimization',
+      'User-Friendly Checkout'
+    ]
   },
   {
     id: 'dashboard',
     title: 'Dashboards & Admin',
     description: 'Powerful data visualization tools and admin panels to manage your business efficiently.',
-    icon: LayoutDashboard
+    icon: LayoutDashboard,
+    features: [
+      'Real-time Data Visualization',
+      'Role-Based Access Control',
+      'Interactive Charts',
+      'Automated Reporting'
+    ]
   },
   {
     id: 'mobile',
     title: 'Responsive & Mobile',
     description: 'Mobile-first approach ensuring your site looks perfect on phones, tablets, and desktops.',
-    icon: Smartphone
+    icon: Smartphone,
+    features: [
+      'Mobile-First Design',
+      'Cross-Platform Compatibility',
+      'Touch-Optimized Interfaces',
+      'PWA (Progressive Web Apps)'
+    ]
   }
 ];
 
@@ -131,7 +195,7 @@ export const PRICING: PricingTier[] = [
   {
     id: 'starter',
     name: 'Starter',
-    price: '₹79,999',
+    price: '₹1,000',
     description: 'Perfect for small businesses looking to establish a web presence.',
     features: [
       '5 Page Responsive Website',
@@ -142,9 +206,9 @@ export const PRICING: PricingTier[] = [
     ]
   },
   {
-    id: 'business',
-    name: 'Business',
-    price: '₹1,99,999',
+    id: 'professional',
+    name: 'Professional',
+    price: '₹3,499',
     description: 'Ideal for growing companies needing dynamic features.',
     recommended: true,
     features: [
@@ -157,9 +221,9 @@ export const PRICING: PricingTier[] = [
     ]
   },
   {
-    id: 'premium',
-    name: 'Premium / Custom',
-    price: '₹3,99,999+',
+    id: 'business',
+    name: 'Business',
+    price: '₹5,299',
     description: 'Full-scale custom development for complex requirements.',
     features: [
       'Unlimited Pages',

@@ -81,67 +81,67 @@ const Contact: React.FC = () => {
           
           {/* Contact Info */}
           <div>
-            <h1 className="text-4xl font-bold text-white mb-6">Let's Build Something<br />Amazing Together.</h1>
-            <p className="text-gray-400 text-lg mb-10">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">Let's Build Something<br />Amazing Together.</h1>
+            <p className="text-gray-600 dark:text-gray-400 text-lg mb-10">
               Have a project in mind? We'd love to hear about it. Send us a message and we'll get back to you within 24 hours.
             </p>
 
             <div className="space-y-8">
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-[#4b6bfb]">
+                <div className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none">
                   <Mail size={24} />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold mb-1">Email Us</h3>
-                  <a href="mailto:contact@prime5coders.com" className="text-gray-400 hover:text-[#4b6bfb] transition-colors">
+                  <h3 className="text-gray-900 dark:text-white font-semibold mb-1">Email Us</h3>
+                  <a href="mailto:contact@prime5coders.com" className="text-gray-600 hover:text-[#4b6bfb] dark:text-gray-400 dark:hover:text-[#4b6bfb] transition-colors">
                     contact@prime5coders.com
                   </a>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                 <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-[#4b6bfb]">
+                 <div className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none">
                   <Phone size={24} />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold mb-1">Call Us</h3>
-                  <p className="text-gray-400">+1 (555) 123-4567</p>
+                  <h3 className="text-gray-900 dark:text-white font-semibold mb-1">Call Us</h3>
+                  <p className="text-gray-600 dark:text-gray-400">+1 (555) 123-4567</p>
                   <a href="#" className="text-sm text-[#4b6bfb] hover:underline mt-1 block">Chat on WhatsApp</a>
                 </div>
               </div>
 
                <div className="flex items-start space-x-4">
-                 <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-[#4b6bfb]">
+                 <div className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none">
                   <MapPin size={24} />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold mb-1">Visit Us</h3>
-                  <p className="text-gray-400">123 Tech Avenue, Silicon Valley<br />San Francisco, CA 94107</p>
+                  <h3 className="text-gray-900 dark:text-white font-semibold mb-1">Visit Us</h3>
+                  <p className="text-gray-600 dark:text-gray-400">123 Tech Avenue, Silicon Valley<br />San Francisco, CA 94107</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-[#0a0f1e] p-8 rounded-2xl border border-white/5 shadow-2xl">
+          <div className="bg-white dark:bg-[#0a0f1e] p-8 rounded-2xl border border-gray-200 dark:border-white/5 shadow-xl dark:shadow-2xl">
             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">Full Name <span className="text-red-500">*</span></label>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name <span className="text-red-500">*</span></label>
                 <input
                   type="text"
                   id="name"
                   name="name"
                   value={formState.name}
                   onChange={handleChange}
-                  className={`w-full bg-[#050816] border rounded-lg px-4 py-3 text-white focus:outline-none transition-all ${
+                  className={`w-full bg-gray-50 dark:bg-[#050816] border rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none transition-all ${
                     errors.name 
                       ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' 
-                      : 'border-white/10 focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb]'
+                      : 'border-gray-300 dark:border-white/10 focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb]'
                   }`}
                   placeholder="John Doe"
                 />
                 {errors.name && (
-                  <p className="mt-2 text-sm text-red-400 flex items-center">
+                  <p className="mt-2 text-sm text-red-500 dark:text-red-400 flex items-center">
                     <AlertCircle size={14} className="mr-1.5" />
                     {errors.name}
                   </p>
@@ -149,22 +149,22 @@ const Contact: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">Email Address <span className="text-red-500">*</span></label>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address <span className="text-red-500">*</span></label>
                 <input
                   type="email"
                   id="email"
                   name="email"
                   value={formState.email}
                   onChange={handleChange}
-                  className={`w-full bg-[#050816] border rounded-lg px-4 py-3 text-white focus:outline-none transition-all ${
+                  className={`w-full bg-gray-50 dark:bg-[#050816] border rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none transition-all ${
                     errors.email
                       ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' 
-                      : 'border-white/10 focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb]'
+                      : 'border-gray-300 dark:border-white/10 focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb]'
                   }`}
                   placeholder="john@example.com"
                 />
                 {errors.email && (
-                  <p className="mt-2 text-sm text-red-400 flex items-center">
+                  <p className="mt-2 text-sm text-red-500 dark:text-red-400 flex items-center">
                     <AlertCircle size={14} className="mr-1.5" />
                     {errors.email}
                   </p>
@@ -172,39 +172,39 @@ const Contact: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="budget" className="block text-sm font-medium text-gray-300 mb-2">Estimated Budget</label>
+                <label htmlFor="budget" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estimated Budget</label>
                 <select
                   id="budget"
                   name="budget"
                   value={formState.budget}
                   onChange={handleChange}
-                  className="w-full bg-[#050816] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb] transition-all"
+                  className="w-full bg-gray-50 dark:bg-[#050816] border border-gray-300 dark:border-white/10 rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb] transition-all"
                 >
                   <option value="">Select a range</option>
-                  <option value="50k-1l">₹50,000 - ₹1,00,000</option>
-                  <option value="1l-3l">₹1,00,000 - ₹3,00,000</option>
-                  <option value="3l-5l">₹3,00,000 - ₹5,00,000</option>
-                  <option value="5l+">₹5,00,000+</option>
+                  <option value="under-2k">Under ₹2,000</option>
+                  <option value="2k-5k">₹2,000 - ₹5,000</option>
+                  <option value="5k-10k">₹5,000 - ₹10,000</option>
+                  <option value="10k+">₹10,000+</option>
                 </select>
               </div>
 
               <div>
-                <label htmlFor="details" className="block text-sm font-medium text-gray-300 mb-2">Project Details <span className="text-red-500">*</span></label>
+                <label htmlFor="details" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Project Details <span className="text-red-500">*</span></label>
                 <textarea
                   id="details"
                   name="details"
                   rows={4}
                   value={formState.details}
                   onChange={handleChange}
-                  className={`w-full bg-[#050816] border rounded-lg px-4 py-3 text-white focus:outline-none transition-all ${
+                  className={`w-full bg-gray-50 dark:bg-[#050816] border rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none transition-all ${
                     errors.details
                       ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' 
-                      : 'border-white/10 focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb]'
+                      : 'border-gray-300 dark:border-white/10 focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb]'
                   }`}
                   placeholder="Tell us about your project goals and timeline..."
                 ></textarea>
                 {errors.details && (
-                  <p className="mt-2 text-sm text-red-400 flex items-center">
+                  <p className="mt-2 text-sm text-red-500 dark:text-red-400 flex items-center">
                     <AlertCircle size={14} className="mr-1.5" />
                     {errors.details}
                   </p>
@@ -213,7 +213,7 @@ const Contact: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold py-4 rounded-lg flex items-center justify-center transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold py-4 rounded-lg flex items-center justify-center transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                 disabled={status === 'success'}
               >
                 {status === 'success' ? 'Message Sent!' : (
