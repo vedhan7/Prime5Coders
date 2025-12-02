@@ -93,35 +93,27 @@ export const PROJECTS: Project[] = [
 export const TEAM: TeamMember[] = [
   {
     id: '1',
-    name: 'Alex Chen',
-    role: 'Lead Full-Stack Dev',
-    bio: 'Architecture wizard with a passion for scalable systems and clean code.',
+    name: 'Vedhan',
+    role: 'CEO & Developer',
+    bio: 'Visionary leader driving technical excellence and business strategy. Expert in full-stack architecture.',
     avatarUrl: 'https://picsum.photos/200/200?random=10',
-    socials: { github: '#', linkedin: '#' }
+    socials: { github: '#', linkedin: '#', twitter: '#' }
   },
   {
     id: '2',
-    name: 'Sarah Jones',
-    role: 'UI/UX Lead',
-    bio: 'Turning complex problems into intuitive, beautiful designs.',
+    name: 'Imran Sheik',
+    role: 'CTO & Developer',
+    bio: 'Technical innovator overseeing system architecture and delivering cutting-edge digital solutions.',
     avatarUrl: 'https://picsum.photos/200/200?random=11',
-    socials: { twitter: '#', linkedin: '#' }
+    socials: { github: '#', linkedin: '#' }
   },
   {
     id: '3',
-    name: 'Marcus Johnson',
-    role: 'Frontend & 3D Specialist',
-    bio: 'Master of pixels, animations, and immersive web experiences.',
+    name: 'Abhishek Raj',
+    role: 'CFO & Marketing Lead',
+    bio: 'Strategic financial planning combined with data-driven marketing to maximize brand growth.',
     avatarUrl: 'https://picsum.photos/200/200?random=12',
-    socials: { github: '#', twitter: '#' }
-  },
-  {
-    id: '4',
-    name: 'Priya Patel',
-    role: 'Backend & DevOps',
-    bio: 'Ensuring 99.9% uptime and secure API integrations.',
-    avatarUrl: 'https://picsum.photos/200/200?random=13',
-    socials: { github: '#', linkedin: '#' }
+    socials: { linkedin: '#', twitter: '#' }
   }
 ];
 

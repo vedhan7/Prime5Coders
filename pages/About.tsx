@@ -11,7 +11,7 @@ const About: React.FC = () => {
           <h1 className="text-4xl font-bold text-white mb-6">Our Story</h1>
           <p className="text-lg text-gray-400 leading-relaxed">
             Prime5Coders started with a simple idea: to bridge the gap between complex engineering and beautiful design. 
-            Founded by four passionate developers, we've grown into a full-service digital agency that treats every project as a masterpiece.
+            Founded by passionate developers, we've grown into a full-service digital agency that treats every project as a masterpiece.
             We don't just write code; we build digital ecosystems that help businesses thrive in the modern web.
           </p>
         </div>
@@ -39,7 +39,7 @@ const About: React.FC = () => {
         {/* Team Grid */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-white mb-12 text-center">Meet The Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {TEAM.map((member) => (
               <div key={member.id} className="glass-card p-6 rounded-2xl text-center group hover:-translate-y-2 transition-transform duration-300">
                 <div className="relative w-32 h-32 mx-auto mb-6">

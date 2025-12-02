@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, AlertCircle } from 'lucide-react';
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  details?: string;
+}
 
 const Contact: React.FC = () => {
   const [formState, setFormState] = useState({
@@ -8,21 +14,64 @@ const Contact: React.FC = () => {
     budget: '',
     details: ''
   });
+  const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+    let isValid = true;
+
+    // Name Validation
+    if (!formState.name.trim()) {
+      newErrors.name = 'Full name is required';
+      isValid = false;
+    }
+
+    // Email Validation
+    if (!formState.email.trim()) {
+      newErrors.email = 'Email address is required';
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) {
+      newErrors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    // Details Validation
+    if (!formState.details.trim()) {
+      newErrors.details = 'Project details are required';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
-    setStatus('success');
-    setTimeout(() => setStatus('idle'), 3000);
-    setFormState({ name: '', email: '', budget: '', details: '' });
+    
+    if (validateForm()) {
+      // Simulate form submission
+      setStatus('success');
+      setTimeout(() => setStatus('idle'), 3000);
+      setFormState({ name: '', email: '', budget: '', details: '' });
+      setErrors({});
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
     setFormState({
       ...formState,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+
+    // Clear error when user starts typing
+    if (errors[name as keyof FormErrors]) {
+      setErrors({
+        ...errors,
+        [name]: undefined
+      });
+    }
   };
 
   return (
@@ -75,33 +124,51 @@ const Contact: React.FC = () => {
 
           {/* Contact Form */}
           <div className="bg-[#0a0f1e] p-8 rounded-2xl border border-white/5 shadow-2xl">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">Full Name <span className="text-red-500">*</span></label>
                 <input
                   type="text"
                   id="name"
                   name="name"
-                  required
                   value={formState.name}
                   onChange={handleChange}
-                  className="w-full bg-[#050816] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb] transition-all"
+                  className={`w-full bg-[#050816] border rounded-lg px-4 py-3 text-white focus:outline-none transition-all ${
+                    errors.name 
+                      ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' 
+                      : 'border-white/10 focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb]'
+                  }`}
                   placeholder="John Doe"
                 />
+                {errors.name && (
+                  <p className="mt-2 text-sm text-red-400 flex items-center">
+                    <AlertCircle size={14} className="mr-1.5" />
+                    {errors.name}
+                  </p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">Email Address <span className="text-red-500">*</span></label>
                 <input
                   type="email"
                   id="email"
                   name="email"
-                  required
                   value={formState.email}
                   onChange={handleChange}
-                  className="w-full bg-[#050816] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb] transition-all"
+                  className={`w-full bg-[#050816] border rounded-lg px-4 py-3 text-white focus:outline-none transition-all ${
+                    errors.email
+                      ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' 
+                      : 'border-white/10 focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb]'
+                  }`}
                   placeholder="john@example.com"
                 />
+                {errors.email && (
+                  <p className="mt-2 text-sm text-red-400 flex items-center">
+                    <AlertCircle size={14} className="mr-1.5" />
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -122,22 +189,32 @@ const Contact: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="details" className="block text-sm font-medium text-gray-300 mb-2">Project Details</label>
+                <label htmlFor="details" className="block text-sm font-medium text-gray-300 mb-2">Project Details <span className="text-red-500">*</span></label>
                 <textarea
                   id="details"
                   name="details"
                   rows={4}
-                  required
                   value={formState.details}
                   onChange={handleChange}
-                  className="w-full bg-[#050816] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb] transition-all"
+                  className={`w-full bg-[#050816] border rounded-lg px-4 py-3 text-white focus:outline-none transition-all ${
+                    errors.details
+                      ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' 
+                      : 'border-white/10 focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb]'
+                  }`}
                   placeholder="Tell us about your project goals and timeline..."
                 ></textarea>
+                {errors.details && (
+                  <p className="mt-2 text-sm text-red-400 flex items-center">
+                    <AlertCircle size={14} className="mr-1.5" />
+                    {errors.details}
+                  </p>
+                )}
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold py-4 rounded-lg flex items-center justify-center transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)]"
+                className="w-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold py-4 rounded-lg flex items-center justify-center transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={status === 'success'}
               >
                 {status === 'success' ? 'Message Sent!' : (
                     <>Send Message <Send size={18} className="ml-2" /></>
