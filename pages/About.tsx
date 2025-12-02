@@ -1,0 +1,82 @@
+import React from 'react';
+import { TEAM } from '../constants';
+import { Github, Linkedin, Twitter } from 'lucide-react';
+
+const About: React.FC = () => {
+  return (
+    <div className="pt-24 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Intro */}
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <h1 className="text-4xl font-bold text-white mb-6">Our Story</h1>
+          <p className="text-lg text-gray-400 leading-relaxed">
+            Prime5Coders started with a simple idea: to bridge the gap between complex engineering and beautiful design. 
+            Founded by four passionate developers, we've grown into a full-service digital agency that treats every project as a masterpiece.
+            We don't just write code; we build digital ecosystems that help businesses thrive in the modern web.
+          </p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-24 border-y border-white/5 py-12">
+            <div className="text-center">
+                <div className="text-4xl font-bold text-[#4b6bfb] mb-2">4+</div>
+                <div className="text-gray-500 text-sm uppercase tracking-wider">Years Experience</div>
+            </div>
+            <div className="text-center">
+                <div className="text-4xl font-bold text-[#4b6bfb] mb-2">50+</div>
+                <div className="text-gray-500 text-sm uppercase tracking-wider">Projects Delivered</div>
+            </div>
+            <div className="text-center">
+                <div className="text-4xl font-bold text-[#4b6bfb] mb-2">24/7</div>
+                <div className="text-gray-500 text-sm uppercase tracking-wider">Support</div>
+            </div>
+            <div className="text-center">
+                <div className="text-4xl font-bold text-[#4b6bfb] mb-2">100%</div>
+                <div className="text-gray-500 text-sm uppercase tracking-wider">Client Satisfaction</div>
+            </div>
+        </div>
+
+        {/* Team Grid */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-white mb-12 text-center">Meet The Team</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {TEAM.map((member) => (
+              <div key={member.id} className="glass-card p-6 rounded-2xl text-center group hover:-translate-y-2 transition-transform duration-300">
+                <div className="relative w-32 h-32 mx-auto mb-6">
+                    <div className="absolute inset-0 bg-blue-500 rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                    <img 
+                        src={member.avatarUrl} 
+                        alt={member.name} 
+                        className="w-full h-full object-cover rounded-full border-2 border-white/10 relative z-10"
+                    />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
+                <p className="text-[#4b6bfb] text-sm font-medium mb-4">{member.role}</p>
+                <p className="text-gray-400 text-sm mb-6">{member.bio}</p>
+                <div className="flex justify-center space-x-4">
+                  {member.socials.github && (
+                    <a href={member.socials.github} className="text-gray-500 hover:text-white transition-colors">
+                      <Github size={18} />
+                    </a>
+                  )}
+                  {member.socials.linkedin && (
+                    <a href={member.socials.linkedin} className="text-gray-500 hover:text-white transition-colors">
+                      <Linkedin size={18} />
+                    </a>
+                  )}
+                   {member.socials.twitter && (
+                    <a href={member.socials.twitter} className="text-gray-500 hover:text-white transition-colors">
+                      <Twitter size={18} />
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default About;
