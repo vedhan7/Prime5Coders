@@ -80,7 +80,7 @@ const Login: React.FC = () => {
     setErrors({});
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate('/'); // Redirect to home on success
+      navigate('/contact'); // Redirect to contact page on success
     } catch (error: any) {
       console.error("Google Login error:", error);
       let errorMessage = 'Google Sign-In failed.';
