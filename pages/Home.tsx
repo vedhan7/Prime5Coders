@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { SERVICES, PROJECTS } from '../constants';
@@ -9,6 +9,7 @@ import { useAuth } from '../context/AuthContext';
 
 const Home: React.FC = () => {
   const { currentUser } = useAuth();
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   
   // Mock data for the chart
   const chartData = [
@@ -18,6 +19,30 @@ const Home: React.FC = () => {
     { name: 'Apr', value: 0 },
     { name: 'May', value: 0 },
   ];
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove('opacity-0', 'translate-y-10');
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    cardsRef.current.forEach((card) => {
+      if (card) observer.observe(card);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="overflow-hidden">
@@ -99,8 +124,13 @@ const Home: React.FC = () => {
                 <p className="text-gray-600 dark:text-gray-400">Expertise spanning across the entire digital spectrum.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {SERVICES.slice(0, 3).map((service) => (
-                    <div key={service.id} className="p-8 glass-card rounded-2xl hover:border-blue-500/30 transition-colors group">
+                {SERVICES.slice(0, 3).map((service, index) => (
+                    <div 
+                      key={service.id} 
+                      ref={(el) => { cardsRef.current[index] = el; }}
+                      className="p-8 glass-card rounded-2xl hover:border-blue-500/30 transition-all duration-700 ease-out group opacity-0 translate-y-10"
+                      style={{ transitionDelay: `${index * 150}ms` }}
+                    >
                         <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform">
                             <service.icon size={24} />
                         </div>

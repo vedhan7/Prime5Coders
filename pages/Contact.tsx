@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Phone, MapPin, Send, AlertCircle, Loader2 } from 'lucide-react';
 import { db } from '../services/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -22,6 +22,34 @@ const Contact: React.FC = () => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  
+  // Refs for animation
+  const iconRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Remove initial hidden state and add visible state
+            entry.target.classList.remove('opacity-0', 'scale-0');
+            entry.target.classList.add('opacity-100', 'scale-100');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    iconRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -118,7 +146,10 @@ const Contact: React.FC = () => {
 
             <div className="space-y-8">
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none">
+                <div 
+                  ref={(el) => { if(el) iconRefs.current[0] = el; }}
+                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0"
+                >
                   <Mail size={24} />
                 </div>
                 <div>
@@ -130,7 +161,10 @@ const Contact: React.FC = () => {
               </div>
 
               <div className="flex items-start space-x-4">
-                 <div className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none">
+                 <div 
+                  ref={(el) => { if(el) iconRefs.current[1] = el; }}
+                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 delay-100"
+                 >
                   <Phone size={24} />
                 </div>
                 <div>
@@ -141,7 +175,10 @@ const Contact: React.FC = () => {
               </div>
 
                <div className="flex items-start space-x-4">
-                 <div className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none">
+                 <div 
+                  ref={(el) => { if(el) iconRefs.current[2] = el; }}
+                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 delay-200"
+                 >
                   <MapPin size={24} />
                 </div>
                 <div>

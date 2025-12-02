@@ -114,42 +114,42 @@ export const SERVICES: Service[] = [
 export const PROJECTS: Project[] = [
   {
     id: '1',
-    title: 'Nebula Finance Dashboard',
+    title: 'SKS PUBLIC SCHOOL',
     category: 'Dashboard',
     description: 'A real-time crypto analytics dashboard with interactive charts and dark mode.',
     techStack: ['React', 'D3.js', 'Tailwind', 'Node.js'],
-    imageUrl: 'https://picsum.photos/800/600?random=1',
-    liveLink: '#',
-    githubLink: '#'
+    imageUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vedantu.com%2Fblog%2Ftop-10-cbse-schools-in-india&psig=AOvVaw23cCzGIZEcXppnu_Mdrs9F&ust=1764755319332000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOil3ITQnpEDFQAAAAAdAAAAABAE',
+    liveLink: 'https://sks-public-school-415273004224.us-west1.run.app/',
+    githubLink: 'https://github.com/vedhan7/SKS_PUBLIC_CBSE'
   },
   {
     id: '2',
-    title: 'Aero E-Commerce',
+    title: 'Byte Force - Attendance System',
     category: 'E-Commerce',
     description: 'A modern furniture store with 3D product previews and AR capabilities.',
     techStack: ['Next.js', 'Three.js', 'Stripe', 'PostgreSQL'],
-    imageUrl: 'https://picsum.photos/800/600?random=2',
-    liveLink: '#',
-    githubLink: '#'
+    imageUrl: 'blob:null/1afab153-b29a-4ee6-a26c-2eb36b2fa7ab',
+    liveLink: 'https://byteforce-attendance-dashboard-415273004224.us-west1.run.app/',
+    githubLink: 'https://github.com/vedhan7/SMART-ATTENDANCE'
   },
   {
     id: '3',
-    title: 'EduLearn LMS',
+    title: 'PR - Mobiles & Accessories',
     category: 'Web App',
     description: 'A comprehensive learning management system for schools with video streaming.',
     techStack: ['Vue.js', 'Firebase', 'WebRTC'],
-    imageUrl: 'https://picsum.photos/800/600?random=3',
-    liveLink: '#',
-    githubLink: '#'
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBRqYvQaHDHd7DJ7EQMBCi---ngqcfeb4qkw&s',
+    liveLink: 'https://pr-cell-mobiles-accessories-showcase-415273004224.us-west1.run.app/',
+    githubLink: 'https://github.com/vedhan7/prcellmobiles'
   },
   {
     id: '4',
-    title: 'Zenith Portfolio',
+    title: 'Portfolio',
     category: '3D/Interactive',
     description: 'An award-winning portfolio site featuring scroll-based animations and WebGL effects.',
     techStack: ['React', 'Framer Motion', 'WebGL'],
-    imageUrl: 'https://picsum.photos/800/600?random=4',
-    liveLink: '#',
+    imageUrl: 'https://static.resumegiants.com/wp-content/uploads/sites/25/2022/06/09105622/Professional-portfolio-736x414.webp',
+    liveLink: 'https://cyberdev-portfolio-415273004224.us-west1.run.app/',
     githubLink: '#'
   }
 ];
@@ -164,7 +164,7 @@ export const TEAM: TeamMember[] = [
     socials: { 
       github: '#', 
       linkedin: 'https://www.linkedin.com/in/vedhan-s-519957375/', 
-      twitter: '#' 
+      twitter: 'https://github.com/vedhan7/Portfolio' 
     }
   },
   {
