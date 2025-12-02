@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, Command, Chrome, AlertCircle } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Command, Chrome, AlertCircle, Loader2 } from 'lucide-react';
 import { auth, googleProvider } from '../services/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
+import { useAuth } from '../context/AuthContext';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -10,6 +12,14 @@ const Login: React.FC = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string; form?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
+
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (currentUser) {
+        navigate('/contact');
+    }
+  }, [currentUser, navigate]);
 
   const validateForm = (): boolean => {
     const newErrors: { email?: string; password?: string; form?: string } = {};
@@ -51,7 +61,7 @@ const Login: React.FC = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/'); // Redirect to home or dashboard on success
+      // Navigation will be handled by the useEffect hook above once auth state changes
     } catch (error: any) {
       console.error("Login error:", error);
       let errorMessage = 'Failed to sign in. Please check your credentials.';
@@ -65,7 +75,6 @@ const Login: React.FC = () => {
         errorMessage = 'Too many attempts. Please try again later.';
       }
       setErrors(prev => ({ ...prev, form: errorMessage }));
-    } finally {
       setIsLoading(false);
     }
   };
@@ -80,7 +89,7 @@ const Login: React.FC = () => {
     setErrors({});
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate('/contact'); // Redirect to contact page on success
+      // Navigation will be handled by the useEffect hook above
     } catch (error: any) {
       console.error("Google Login error:", error);
       let errorMessage = 'Google Sign-In failed.';
@@ -94,7 +103,6 @@ const Login: React.FC = () => {
         errorMessage = 'An account already exists with the same email address but different sign-in credentials.';
       }
       setErrors(prev => ({ ...prev, form: errorMessage }));
-    } finally {
       setIsLoading(false);
     }
   };
@@ -211,10 +219,19 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-[#4b6bfb] hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4b6bfb] transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)] disabled:opacity-70 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-[#4b6bfb] hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4b6bfb] transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)] disabled:opacity-70 disabled:cursor-not-allowed items-center"
             >
-              {isLoading ? 'Signing in...' : 'Sign in'}
-              {!isLoading && <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />}
+              {isLoading ? (
+                <>
+                    <Loader2 size={18} className="mr-2 animate-spin" />
+                    Signing in...
+                </>
+              ) : (
+                <>
+                    Sign in
+                    <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
             </button>
 
             <div className="relative">
@@ -232,7 +249,11 @@ const Login: React.FC = () => {
               disabled={isLoading}
               className="w-full inline-flex justify-center items-center py-3 px-4 border border-gray-300 dark:border-white/10 rounded-lg shadow-sm bg-white dark:bg-white/5 text-sm font-bold text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-colors disabled:opacity-50"
             >
-              <Chrome size={20} className="mr-3 text-blue-600 dark:text-blue-400" />
+                {isLoading ? (
+                    <Loader2 size={20} className="mr-2 animate-spin text-blue-600 dark:text-blue-400" />
+                ) : (
+                    <Chrome size={20} className="mr-3 text-blue-600 dark:text-blue-400" />
+                )}
               Sign in with Google
             </button>
           </form>

@@ -1,9 +1,12 @@
+
 import React from 'react';
 import { PRICING } from '../constants';
 import { Check, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Pricing: React.FC = () => {
+  const { currentUser } = useAuth();
   return (
     <div className="pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,7 +52,7 @@ const Pricing: React.FC = () => {
               </div>
 
               <Link 
-                to="/login"
+                to={currentUser ? "/contact" : "/login"}
                 className={`w-full block text-center py-3 rounded-lg font-semibold transition-all ${
                   tier.recommended
                     ? 'bg-[#4b6bfb] hover:bg-blue-600 text-white shadow-lg'

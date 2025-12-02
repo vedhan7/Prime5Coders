@@ -1,11 +1,15 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { SERVICES, PROJECTS } from '../constants';
 import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
 import ThreeBackground from '../components/ThreeBackground';
+import { useAuth } from '../context/AuthContext';
 
 const Home: React.FC = () => {
+  const { currentUser } = useAuth();
+  
   // Mock data for the chart
   const chartData = [
     { name: 'Jan', value: 0 },
@@ -40,7 +44,7 @@ const Home: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              to="/login"
+              to={currentUser ? "/contact" : "/login"}
               className="px-8 py-4 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold text-lg transition-all animate-glow shadow-lg"
             >
               Order Your First Site

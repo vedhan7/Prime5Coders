@@ -1,21 +1,27 @@
+
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, AlertCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, AlertCircle, Loader2 } from 'lucide-react';
+import { db } from '../services/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 interface FormErrors {
   name?: string;
   email?: string;
+  phone?: string;
   details?: string;
+  form?: string;
 }
 
 const Contact: React.FC = () => {
   const [formState, setFormState] = useState({
     name: '',
     email: '',
+    phone: '',
     budget: '',
     details: ''
   });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -36,6 +42,12 @@ const Contact: React.FC = () => {
       isValid = false;
     }
 
+    // Phone Validation (Optional but recommended to be digits)
+    if (formState.phone && !/^\+?[\d\s-]{10,}$/.test(formState.phone)) {
+      newErrors.phone = 'Please enter a valid phone number';
+      isValid = false;
+    }
+
     // Details Validation
     if (!formState.details.trim()) {
       newErrors.details = 'Project details are required';
@@ -46,15 +58,33 @@ const Contact: React.FC = () => {
     return isValid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
-      // Simulate form submission
-      setStatus('success');
-      setTimeout(() => setStatus('idle'), 3000);
-      setFormState({ name: '', email: '', budget: '', details: '' });
-      setErrors({});
+      setStatus('submitting');
+      
+      try {
+        await addDoc(collection(db, "contactMessages"), {
+          name: formState.name,
+          email: formState.email,
+          phone: formState.phone,
+          budget: formState.budget,
+          message: formState.details, // Saving as 'message' to match your requested structure
+          createdAt: serverTimestamp(),
+        });
+        
+        setStatus('success');
+        setFormState({ name: '', email: '', phone: '', budget: '', details: '' });
+        setErrors({});
+        
+        // Reset success message after 3 seconds
+        setTimeout(() => setStatus('idle'), 3000);
+      } catch (error) {
+        console.error("Error saving message:", error);
+        setStatus('error');
+        setErrors(prev => ({...prev, form: "Failed to send message. Please try again later."}));
+      }
     }
   };
 
@@ -124,6 +154,12 @@ const Contact: React.FC = () => {
 
           {/* Contact Form */}
           <div className="bg-white dark:bg-[#0a0f1e] p-8 rounded-2xl border border-gray-200 dark:border-white/5 shadow-xl dark:shadow-2xl">
+            {errors.form && (
+              <div className="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm flex items-start">
+                <AlertCircle size={18} className="mt-0.5 mr-2 flex-shrink-0" />
+                {errors.form}
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name <span className="text-red-500">*</span></label>
@@ -172,6 +208,29 @@ const Contact: React.FC = () => {
               </div>
 
               <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formState.phone}
+                  onChange={handleChange}
+                  className={`w-full bg-gray-50 dark:bg-[#050816] border rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none transition-all ${
+                    errors.phone
+                      ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' 
+                      : 'border-gray-300 dark:border-white/10 focus:border-[#4b6bfb] focus:ring-1 focus:ring-[#4b6bfb]'
+                  }`}
+                  placeholder="+1 (555) 000-0000"
+                />
+                {errors.phone && (
+                  <p className="mt-2 text-sm text-red-500 dark:text-red-400 flex items-center">
+                    <AlertCircle size={14} className="mr-1.5" />
+                    {errors.phone}
+                  </p>
+                )}
+              </div>
+
+              <div>
                 <label htmlFor="budget" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estimated Budget</label>
                 <select
                   id="budget"
@@ -214,10 +273,17 @@ const Contact: React.FC = () => {
               <button
                 type="submit"
                 className="w-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold py-4 rounded-lg flex items-center justify-center transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-                disabled={status === 'success'}
+                disabled={status === 'submitting' || status === 'success'}
               >
-                {status === 'success' ? 'Message Sent!' : (
-                    <>Send Message <Send size={18} className="ml-2" /></>
+                {status === 'submitting' ? (
+                  <>
+                    <Loader2 size={18} className="mr-2 animate-spin" />
+                    Sending...
+                  </>
+                ) : status === 'success' ? (
+                  'Message Sent!'
+                ) : (
+                  <>Send Message <Send size={18} className="ml-2" /></>
                 )}
               </button>
             </form>

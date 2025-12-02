@@ -1,13 +1,17 @@
+
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Command, Sun, Moon } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, Command, Sun, Moon, LogOut, User } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { currentUser, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +25,15 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error("Failed to log out", error);
+    }
+  };
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -76,12 +89,34 @@ const Navbar: React.FC = () => {
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
-            <Link
-              to="/login"
-              className="px-5 py-2.5 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-semibold text-sm transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)]"
-            >
-              Get Started
-            </Link>
+            {currentUser ? (
+              <div className="flex items-center gap-4">
+                 <span className="text-sm text-gray-600 dark:text-gray-300 hidden lg:block flex items-center gap-2">
+                    <User size={16} />
+                    {currentUser.displayName?.split(' ')[0] || 'User'}
+                 </span>
+                 <button
+                    onClick={handleLogout}
+                    className="p-2 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
+                    title="Log Out"
+                 >
+                    <LogOut size={20} />
+                 </button>
+                 <Link
+                  to="/contact"
+                  className="px-5 py-2.5 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-semibold text-sm transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)]"
+                >
+                  New Project
+                </Link>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="px-5 py-2.5 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-semibold text-sm transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)]"
+              >
+                Get Started
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -119,13 +154,33 @@ const Navbar: React.FC = () => {
                 {link.name}
               </Link>
             ))}
-            <div className="pt-4">
-                <Link
-                to="/login"
-                className="block w-full text-center px-5 py-3 rounded-md bg-[#4b6bfb] text-white font-bold shadow-lg"
-                >
-                Get Started
-                </Link>
+            <div className="pt-4 border-t border-gray-100 dark:border-white/5 mt-2">
+                {currentUser ? (
+                    <>
+                        <div className="px-3 py-2 text-gray-500 dark:text-gray-400 text-sm">
+                            Signed in as {currentUser.email}
+                        </div>
+                         <Link
+                            to="/contact"
+                            className="block w-full text-center px-5 py-3 rounded-md bg-[#4b6bfb] text-white font-bold shadow-lg mb-3"
+                        >
+                            New Project
+                        </Link>
+                        <button
+                            onClick={handleLogout}
+                            className="block w-full text-center px-5 py-3 rounded-md bg-gray-100 dark:bg-white/5 text-gray-900 dark:text-white font-medium hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+                        >
+                            Log Out
+                        </button>
+                    </>
+                ) : (
+                    <Link
+                    to="/login"
+                    className="block w-full text-center px-5 py-3 rounded-md bg-[#4b6bfb] text-white font-bold shadow-lg"
+                    >
+                    Get Started
+                    </Link>
+                )}
             </div>
           </div>
         </div>

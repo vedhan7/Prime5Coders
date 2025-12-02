@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBwNsv1E6-ro5w6a2vsVGn5ragYqhe4nKM",
@@ -29,6 +30,9 @@ try {
 // With gstatic imports, this correctly registers the component
 const auth = getAuth(app);
 
+// Initialize Firestore
+const db = getFirestore(app);
+
 // Initialize Google Provider
 const googleProvider = new GoogleAuthProvider();
 // Add scopes for better user data access
@@ -39,4 +43,4 @@ googleProvider.setCustomParameters({
   prompt: 'select_account'
 });
 
-export { app, analytics, auth, googleProvider };
+export { app, analytics, auth, googleProvider, db };
