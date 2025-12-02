@@ -162,9 +162,8 @@ export const TEAM: TeamMember[] = [
     bio: 'Visionary leader driving technical excellence and business strategy. Expert in full-stack architecture.',
     avatarUrl: 'https://picsum.photos/200/200?random=10',
     socials: { 
-      github: '#', 
+      github: 'https://github.com/vedhan7', 
       linkedin: 'https://www.linkedin.com/in/vedhan-s-519957375/', 
-      twitter: 'https://github.com/vedhan7/Portfolio' 
     }
   },
   {
@@ -172,7 +171,7 @@ export const TEAM: TeamMember[] = [
     name: 'Imran Sheik',
     role: 'CTO & Developer',
     bio: 'Technical innovator overseeing system architecture and delivering cutting-edge digital solutions.',
-    avatarUrl: 'https://picsum.photos/200/200?random=11',
+    avatarUrl: 'https://media.licdn.com/dms/image/v2/D4D03AQGTwgf4b0l3vg/profile-displayphoto-crop_800_800/B4DZob3uJ0GQAI-/0/1761404185938?e=1766016000&v=beta&t=QllI2zmNKLk92EWmTNMGnSFHqeSRu18V7ISD4yL3nkI',
     socials: { 
       github: '#', 
       linkedin: 'https://www.linkedin.com/in/imran-sheik/' 
@@ -183,10 +182,10 @@ export const TEAM: TeamMember[] = [
     name: 'Abhishek Raj',
     role: 'CFO & Marketing Lead',
     bio: 'Strategic financial planning combined with data-driven marketing to maximize brand growth.',
-    avatarUrl: 'https://picsum.photos/200/200?random=12',
+    avatarUrl: 'https://media.licdn.com/dms/image/v2/D4D03AQGbBvlDJiecJw/profile-displayphoto-crop_800_800/B4DZreDVFtIgAI-/0/1764662007357?e=1766016000&v=beta&t=77sMsgELEel7LQPyO2sMMptexPna7RzVvBfi0nZAspw',
     socials: { 
       linkedin: 'https://www.linkedin.com/in/abishek-raj-647809311/', 
-      twitter: '#' 
+      github: '#' 
     }
   }
 ];
