@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, Command, Github, Chrome, AlertCircle } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Command, Chrome, AlertCircle } from 'lucide-react';
 import { auth, googleProvider } from '../services/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -37,6 +37,11 @@ const Login: React.FC = () => {
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!auth) {
+      setErrors({ form: 'Authentication service not initialized. Please refresh the page.' });
+      return;
+    }
+
     if (!validateForm()) {
       return;
     }
@@ -56,6 +61,8 @@ const Login: React.FC = () => {
         errorMessage = 'No user found with this email.';
       } else if (error.code === 'auth/wrong-password') {
         errorMessage = 'Incorrect password.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many attempts. Please try again later.';
       }
       setErrors(prev => ({ ...prev, form: errorMessage }));
     } finally {
@@ -64,6 +71,11 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLogin = async () => {
+    if (!auth || !googleProvider) {
+      setErrors({ form: 'Authentication service not initialized. Please refresh the page.' });
+      return;
+    }
+
     setIsLoading(true);
     setErrors({});
     try {
@@ -71,7 +83,17 @@ const Login: React.FC = () => {
       navigate('/'); // Redirect to home on success
     } catch (error: any) {
       console.error("Google Login error:", error);
-      setErrors(prev => ({ ...prev, form: 'Google Sign-In failed. Please try again.' }));
+      let errorMessage = 'Google Sign-In failed.';
+      if (error.code === 'auth/popup-closed-by-user') {
+        errorMessage = 'Sign-in popup was closed.';
+      } else if (error.code === 'auth/configuration-not-found') {
+        errorMessage = 'Google Sign-In is not enabled in the Firebase Console.';
+      } else if (error.code === 'auth/unauthorized-domain') {
+        errorMessage = 'This domain is not authorized for OAuth operations.';
+      } else if (error.code === 'auth/account-exists-with-different-credential') {
+        errorMessage = 'An account already exists with the same email address but different sign-in credentials.';
+      }
+      setErrors(prev => ({ ...prev, form: errorMessage }));
     } finally {
       setIsLoading(false);
     }
@@ -204,25 +226,15 @@ const Login: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={handleGoogleLogin}
-                disabled={isLoading}
-                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 dark:border-white/10 rounded-lg shadow-sm bg-white dark:bg-white/5 text-sm font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-colors disabled:opacity-50"
-              >
-                <Chrome size={20} className="text-gray-900 dark:text-white" />
-                <span className="sr-only">Sign in with Google</span>
-              </button>
-              <button
-                type="button"
-                disabled={isLoading}
-                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 dark:border-white/10 rounded-lg shadow-sm bg-white dark:bg-white/5 text-sm font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-colors disabled:opacity-50"
-              >
-                <Github size={20} className="text-gray-900 dark:text-white" />
-                <span className="sr-only">Sign in with GitHub</span>
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              disabled={isLoading}
+              className="w-full inline-flex justify-center items-center py-3 px-4 border border-gray-300 dark:border-white/10 rounded-lg shadow-sm bg-white dark:bg-white/5 text-sm font-bold text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-colors disabled:opacity-50"
+            >
+              <Chrome size={20} className="mr-3 text-blue-600 dark:text-blue-400" />
+              Sign in with Google
+            </button>
           </form>
         </div>
 
