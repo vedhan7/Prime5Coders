@@ -41,7 +41,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
               to="/contact"
-              className="px-8 py-4 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold text-lg transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)]"
+              className="px-8 py-4 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold text-lg transition-all animate-glow"
             >
               Hire Prime5Coders
             </Link>

@@ -58,7 +58,7 @@ const Services: React.FC = () => {
             </p>
             <Link 
                 to="/contact"
-                className="inline-block px-8 py-4 bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold rounded-full transition-shadow hover:shadow-[0_0_20px_rgba(75,107,251,0.5)]"
+                className="inline-block px-8 py-4 bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold rounded-full transition-all animate-glow"
             >
                 Start Conversation
             </Link>

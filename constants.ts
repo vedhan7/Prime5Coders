@@ -97,7 +97,11 @@ export const TEAM: TeamMember[] = [
     role: 'CEO & Developer',
     bio: 'Visionary leader driving technical excellence and business strategy. Expert in full-stack architecture.',
     avatarUrl: 'https://picsum.photos/200/200?random=10',
-    socials: { github: '#', linkedin: '#', twitter: '#' }
+    socials: { 
+      github: '#', 
+      linkedin: 'https://www.linkedin.com/in/vedhan-s-519957375/', 
+      twitter: '#' 
+    }
   },
   {
     id: '2',
@@ -105,7 +109,10 @@ export const TEAM: TeamMember[] = [
     role: 'CTO & Developer',
     bio: 'Technical innovator overseeing system architecture and delivering cutting-edge digital solutions.',
     avatarUrl: 'https://picsum.photos/200/200?random=11',
-    socials: { github: '#', linkedin: '#' }
+    socials: { 
+      github: '#', 
+      linkedin: 'https://www.linkedin.com/in/imran-sheik/' 
+    }
   },
   {
     id: '3',
@@ -113,7 +120,10 @@ export const TEAM: TeamMember[] = [
     role: 'CFO & Marketing Lead',
     bio: 'Strategic financial planning combined with data-driven marketing to maximize brand growth.',
     avatarUrl: 'https://picsum.photos/200/200?random=12',
-    socials: { linkedin: '#', twitter: '#' }
+    socials: { 
+      linkedin: 'https://www.linkedin.com/in/abishek-raj-647809311/', 
+      twitter: '#' 
+    }
   }
 ];
 
@@ -162,26 +172,4 @@ export const PRICING: PricingTier[] = [
   }
 ];
 
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    id: '1',
-    name: 'David Wright',
-    company: 'TechFlow Inc.',
-    content: 'Prime5Coders transformed our outdated site into a lead-generating machine. The 3D elements are a game changer.',
-    avatarUrl: 'https://picsum.photos/100/100?random=20'
-  },
-  {
-    id: '2',
-    name: 'Elena Rodriguez',
-    company: 'Artisan Coffee',
-    content: 'The e-commerce platform they built is seamless. Our sales increased by 40% in the first month.',
-    avatarUrl: 'https://picsum.photos/100/100?random=21'
-  },
-  {
-    id: '3',
-    name: 'Michael Chang',
-    company: 'NextGen Startup',
-    content: 'Professional, fast, and incredibly talented. They understood our vision perfectly from day one.',
-    avatarUrl: 'https://picsum.photos/100/100?random=22'
-  }
-];
+export const TESTIMONIALS: Testimonial[] = [];
