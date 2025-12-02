@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { TEAM } from '../constants';
+import { TEAM, PROCESS_STEPS } from '../constants';
 import { Github, Linkedin, Twitter } from 'lucide-react';
 
 const About: React.FC = () => {
@@ -30,6 +31,29 @@ const About: React.FC = () => {
                 <div className="text-4xl font-bold text-[#4b6bfb] mb-2">100%</div>
                 <div className="text-gray-500 text-sm uppercase tracking-wider">Client Satisfaction</div>
             </div>
+        </div>
+
+        {/* How We Work (Process Timeline) */}
+        <div className="mb-24">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12 text-center">How We Work</h2>
+          <div className="relative">
+            {/* Connecting Line (Desktop) */}
+            <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gray-200 dark:bg-white/10 z-0"></div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {PROCESS_STEPS.map((step, index) => (
+                <div key={index} className="relative z-10 flex flex-col items-center text-center group">
+                  <div className="w-24 h-24 rounded-full bg-white dark:bg-[#0a0f1e] border-4 border-gray-100 dark:border-gray-800 flex items-center justify-center mb-6 shadow-lg group-hover:border-[#4b6bfb] group-hover:scale-110 transition-all duration-300">
+                    <step.icon size={32} className="text-gray-400 group-hover:text-[#4b6bfb] transition-colors" />
+                  </div>
+                  <div className="bg-white dark:bg-[#0a0f1e] px-4">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{step.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{step.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Team Grid */}

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Github, Linkedin, Twitter, Mail, MapPin, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -15,9 +16,9 @@ const Footer: React.FC = () => {
               We code prime solutions for modern brands. Elevating your digital presence with cutting-edge web technologies.
             </p>
             <div className="flex space-x-4 pt-2">
-              <a href="#" className="text-gray-500 hover:text-[#4b6bfb] dark:text-gray-400 dark:hover:text-[#4b6bfb] transition-colors"><Github size={20} /></a>
-              <a href="#" className="text-gray-500 hover:text-[#4b6bfb] dark:text-gray-400 dark:hover:text-[#4b6bfb] transition-colors"><Linkedin size={20} /></a>
-              <a href="#" className="text-gray-500 hover:text-[#4b6bfb] dark:text-gray-400 dark:hover:text-[#4b6bfb] transition-colors"><Twitter size={20} /></a>
+              <a href="#" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#4b6bfb] dark:text-gray-400 dark:hover:text-[#4b6bfb] transition-colors"><Github size={20} /></a>
+              <a href="#" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#4b6bfb] dark:text-gray-400 dark:hover:text-[#4b6bfb] transition-colors"><Linkedin size={20} /></a>
+              <a href="#" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#4b6bfb] dark:text-gray-400 dark:hover:text-[#4b6bfb] transition-colors"><Twitter size={20} /></a>
             </div>
           </div>
 

@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, Command, Chrome, AlertCircle, Loader2 } from 'lucide-react';
-import { auth, googleProvider } from '../services/firebase';
+import { auth, googleProvider, analytics } from '../services/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
+import { logEvent } from 'firebase/analytics';
 import { useAuth } from '../context/AuthContext';
 
 const Login: React.FC = () => {
@@ -17,7 +18,7 @@ const Login: React.FC = () => {
   // Redirect if user is already logged in
   useEffect(() => {
     if (currentUser) {
-        navigate('/contact');
+        navigate('/pricing');
     }
   }, [currentUser, navigate]);
 
@@ -61,6 +62,10 @@ const Login: React.FC = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      // Track Login
+      if (analytics) {
+        logEvent(analytics, 'login', { method: 'email' });
+      }
       // Navigation will be handled by the useEffect hook above once auth state changes
     } catch (error: any) {
       console.error("Login error:", error);
@@ -89,6 +94,10 @@ const Login: React.FC = () => {
     setErrors({});
     try {
       await signInWithPopup(auth, googleProvider);
+      // Track Login
+      if (analytics) {
+        logEvent(analytics, 'login', { method: 'google' });
+      }
       // Navigation will be handled by the useEffect hook above
     } catch (error: any) {
       console.error("Google Login error:", error);
@@ -261,7 +270,7 @@ const Login: React.FC = () => {
 
         <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
           Don't have an account?{' '}
-          <Link to="/contact" className="font-medium text-[#4b6bfb] hover:text-blue-500">
+          <Link to="/pricing" className="font-medium text-[#4b6bfb] hover:text-blue-500">
             Start a project request
           </Link>
         </p>

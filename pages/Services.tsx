@@ -14,7 +14,7 @@ const Services: React.FC = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.remove('opacity-0', 'translate-y-24');
+            entry.target.classList.remove('opacity-0', 'translate-y-12');
             entry.target.classList.add('opacity-100', 'translate-y-0');
             observer.unobserve(entry.target);
           }
@@ -49,7 +49,7 @@ const Services: React.FC = () => {
             <div 
               key={service.id} 
               ref={(el) => { cardsRef.current[index] = el; }}
-              className="glass-card p-8 rounded-2xl flex flex-col h-full hover:border-blue-500/50 transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] group opacity-0 translate-y-24"
+              className="glass-card p-8 rounded-2xl flex flex-col h-full hover:border-blue-500/50 transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] group opacity-0 translate-y-12"
               style={{ transitionDelay: `${index * 100}ms` }}
             >
               <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center text-white mb-6 shadow-lg shadow-blue-500/20 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-blue-500/40">
@@ -78,7 +78,7 @@ const Services: React.FC = () => {
                 </a>
               ) : (
                 <Link 
-                  to={currentUser ? "/contact" : "/login"} 
+                  to={currentUser ? "/pricing" : "/login"} 
                   className="w-full block text-center py-3 rounded-lg border border-gray-300 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-900 dark:text-white font-semibold transition-colors"
                 >
                   Get a Quote
@@ -95,7 +95,7 @@ const Services: React.FC = () => {
                 Let's discuss how we can help your business grow with our technical expertise.
             </p>
             <Link 
-                to={currentUser ? "/contact" : "/login"}
+                to={currentUser ? "/pricing" : "/login"}
                 className="inline-block px-8 py-4 bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold rounded-full transition-all animate-glow shadow-md"
             >
                 Start Conversation

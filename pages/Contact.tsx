@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Phone, MapPin, Send, AlertCircle, Loader2 } from 'lucide-react';
-import { db } from '../services/firebase';
+import { db, analytics } from '../services/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { logEvent } from 'firebase/analytics';
 
 interface FormErrors {
   name?: string;
@@ -101,6 +102,15 @@ const Contact: React.FC = () => {
           message: formState.details, // Saving as 'message' to match your requested structure
           createdAt: serverTimestamp(),
         });
+
+        // Track Lead Generation
+        if (analytics) {
+          logEvent(analytics, 'generate_lead', {
+            currency: 'INR',
+            value: formState.budget === 'under-2k' ? 1000 : 5000, // Approximate value estimation
+            budget_range: formState.budget
+          });
+        }
         
         setStatus('success');
         setFormState({ name: '', email: '', phone: '', budget: '', details: '' });
@@ -148,7 +158,7 @@ const Contact: React.FC = () => {
               <div className="flex items-start space-x-4">
                 <div 
                   ref={(el) => { if(el) iconRefs.current[0] = el; }}
-                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0"
+                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] hover:text-blue-400 hover:scale-110 shadow-sm dark:shadow-none transition-all duration-700 hover:duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 cursor-default"
                 >
                   <Mail size={24} />
                 </div>
@@ -163,7 +173,7 @@ const Contact: React.FC = () => {
               <div className="flex items-start space-x-4">
                  <div 
                   ref={(el) => { if(el) iconRefs.current[1] = el; }}
-                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 delay-100"
+                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] hover:text-blue-400 hover:scale-110 shadow-sm dark:shadow-none transition-all duration-700 hover:duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 cursor-default delay-100"
                  >
                   <Phone size={24} />
                 </div>
@@ -177,7 +187,7 @@ const Contact: React.FC = () => {
                <div className="flex items-start space-x-4">
                  <div 
                   ref={(el) => { if(el) iconRefs.current[2] = el; }}
-                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] shadow-sm dark:shadow-none transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 delay-200"
+                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] hover:text-blue-400 hover:scale-110 shadow-sm dark:shadow-none transition-all duration-700 hover:duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 cursor-default delay-200"
                  >
                   <MapPin size={24} />
                 </div>

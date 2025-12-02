@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Command, Sun, Moon, LogOut, User } from 'lucide-react';
+import { Menu, X, Command, Sun, Moon, LogOut, User, LayoutDashboard } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
@@ -91,7 +91,16 @@ const Navbar: React.FC = () => {
 
             {currentUser ? (
               <div className="flex items-center gap-4">
-                 <span className="text-sm text-gray-600 dark:text-gray-300 hidden lg:block flex items-center gap-2">
+                 <Link 
+                    to="/dashboard"
+                    className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-[#4b6bfb] ${
+                        location.pathname === '/dashboard' ? 'text-[#4b6bfb]' : 'text-gray-600 dark:text-gray-300'
+                    }`}
+                 >
+                    <LayoutDashboard size={18} />
+                    <span className="hidden lg:inline">Dashboard</span>
+                 </Link>
+                 <span className="text-sm text-gray-600 dark:text-gray-300 hidden xl:block flex items-center gap-2">
                     <User size={16} />
                     {currentUser.displayName?.split(' ')[0] || 'User'}
                  </span>
@@ -103,8 +112,8 @@ const Navbar: React.FC = () => {
                     <LogOut size={20} />
                  </button>
                  <Link
-                  to="/contact"
-                  className="px-5 py-2.5 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-semibold text-sm transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)]"
+                  to="/pricing"
+                  className="px-5 py-2.5 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-semibold text-sm transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)] animate-glow"
                 >
                   New Project
                 </Link>
@@ -160,9 +169,18 @@ const Navbar: React.FC = () => {
                         <div className="px-3 py-2 text-gray-500 dark:text-gray-400 text-sm">
                             Signed in as {currentUser.email}
                         </div>
+                        <Link
+                            to="/dashboard"
+                            className="block px-3 py-3 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#4b6bfb] dark:hover:text-white mb-2"
+                        >
+                            <div className="flex items-center gap-2">
+                                <LayoutDashboard size={18} />
+                                Dashboard
+                            </div>
+                        </Link>
                          <Link
-                            to="/contact"
-                            className="block w-full text-center px-5 py-3 rounded-md bg-[#4b6bfb] text-white font-bold shadow-lg mb-3"
+                            to="/pricing"
+                            className="block w-full text-center px-5 py-3 rounded-md bg-[#4b6bfb] text-white font-bold shadow-lg mb-3 animate-glow"
                         >
                             New Project
                         </Link>

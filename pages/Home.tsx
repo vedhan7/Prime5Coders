@@ -3,22 +3,12 @@ import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { SERVICES, PROJECTS } from '../constants';
-import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
 import ThreeBackground from '../components/ThreeBackground';
 import { useAuth } from '../context/AuthContext';
 
 const Home: React.FC = () => {
   const { currentUser } = useAuth();
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-  
-  // Mock data for the chart
-  const chartData = [
-    { name: 'Jan', value: 0 },
-    { name: 'Feb', value: 0 },
-    { name: 'Mar', value: 0 },
-    { name: 'Apr', value: 0 },
-    { name: 'May', value: 0 },
-  ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -69,7 +59,7 @@ const Home: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              to={currentUser ? "/contact" : "/login"}
+              to={currentUser ? "/pricing" : "/login"}
               className="px-8 py-4 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold text-lg transition-all animate-glow shadow-lg"
             >
               Order Your First Site
@@ -80,38 +70,6 @@ const Home: React.FC = () => {
             >
               View Our Work
             </Link>
-          </div>
-
-          {/* Dashboard Preview */}
-          <div className="mt-20 mx-auto max-w-4xl p-4 glass-card rounded-xl border-t border-gray-200 dark:border-white/10 shadow-2xl transform hover:scale-[1.01] transition-transform duration-500">
-             <div className="flex items-center justify-start mb-4 border-b border-gray-200 dark:border-white/5 pb-4 px-4">
-                <div className="text-xs text-gray-500">dashboard_analytics.tsx</div>
-             </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-4 pb-4">
-                <div className="space-y-4 text-left">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Live Performance</h3>
-                    <div className="h-40 w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={chartData}>
-                                <Bar dataKey="value" fill="#4b6bfb" radius={[4, 4, 0, 0]} />
-                                <Tooltip 
-                                    contentStyle={{ backgroundColor: 'var(--tw-prose-invert-bg)', borderColor: 'transparent' }}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
-                <div className="space-y-4 text-left flex flex-col justify-center">
-                    <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/5">
-                        <p className="text-gray-500 dark:text-gray-400 text-sm">Active Users</p>
-                        <p className="text-3xl font-bold text-gray-900 dark:text-white">0</p>
-                    </div>
-                    <div className="p-4 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/5">
-                         <p className="text-gray-500 dark:text-gray-400 text-sm">Revenue Growth</p>
-                        <p className="text-3xl font-bold text-gray-400 dark:text-gray-300">0%</p>
-                    </div>
-                </div>
-             </div>
           </div>
         </div>
       </section>

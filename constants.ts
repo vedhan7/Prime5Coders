@@ -1,3 +1,4 @@
+
 import { 
   Code, 
   Palette, 
@@ -6,7 +7,11 @@ import {
   LayoutDashboard, 
   Smartphone,
   Globe,
-  Lock
+  Lock,
+  Search,
+  PenTool,
+  Rocket,
+  MessageSquare
 } from 'lucide-react';
 import { Service, Project, TeamMember, PricingTier, Testimonial } from './types';
 
@@ -118,7 +123,7 @@ export const PROJECTS: Project[] = [
     category: 'Dashboard',
     description: 'A real-time crypto analytics dashboard with interactive charts and dark mode.',
     techStack: ['React', 'D3.js', 'Tailwind', 'Node.js'],
-    imageUrl: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vedantu.com%2Fblog%2Ftop-10-cbse-schools-in-india&psig=AOvVaw23cCzGIZEcXppnu_Mdrs9F&ust=1764755319332000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOil3ITQnpEDFQAAAAAdAAAAABAE',
+    imageUrl: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=2070&auto=format&fit=crop',
     liveLink: 'https://sks-public-school-415273004224.us-west1.run.app/',
     githubLink: 'https://github.com/vedhan7/SKS_PUBLIC_CBSE'
   },
@@ -129,7 +134,7 @@ export const PROJECTS: Project[] = [
     description: 'A modern furniture store with 3D product previews and AR capabilities.',
     techStack: ['Next.js', 'Three.js', 'Stripe', 'PostgreSQL'],
     imageUrl: 'blob:null/1afab153-b29a-4ee6-a26c-2eb36b2fa7ab',
-    liveLink: 'https://byteforce-attendance-dashboard-415273004224.us-west1.run.app/',
+    liveLink: 'https://www.qandle.com/blog/wp-content/uploads/2024/07/AI-Based-Attendance-System-scaled.jpeg',
     githubLink: 'https://github.com/vedhan7/SMART-ATTENDANCE'
   },
   {
@@ -160,7 +165,8 @@ export const TEAM: TeamMember[] = [
     name: 'Vedhan',
     role: 'CEO & Developer',
     bio: 'Visionary leader driving technical excellence and business strategy. Expert in full-stack architecture.',
-    avatarUrl: 'https://picsum.photos/200/200?random=10',
+    // Replace the URL below with your actual hosted image URL
+    avatarUrl: 'https://media.licdn.com/dms/image/v2/D4E03AQHxn6F7Tg6Fvw/profile-displayphoto-crop_800_800/B4EZlrukwnKkAM-/0/1758448996527?e=1766016000&v=beta&t=fEaVuVBQ0bn71v6-y0hnpUdzKilwqOlWYsdj7JHb8A4',
     socials: { 
       github: 'https://github.com/vedhan7', 
       linkedin: 'https://www.linkedin.com/in/vedhan-s-519957375/', 
@@ -171,6 +177,7 @@ export const TEAM: TeamMember[] = [
     name: 'Imran Sheik',
     role: 'CTO & Developer',
     bio: 'Technical innovator overseeing system architecture and delivering cutting-edge digital solutions.',
+    // Replace the URL below with your actual hosted image URL
     avatarUrl: 'https://media.licdn.com/dms/image/v2/D4D03AQGTwgf4b0l3vg/profile-displayphoto-crop_800_800/B4DZob3uJ0GQAI-/0/1761404185938?e=1766016000&v=beta&t=QllI2zmNKLk92EWmTNMGnSFHqeSRu18V7ISD4yL3nkI',
     socials: { 
       github: '#', 
@@ -179,9 +186,10 @@ export const TEAM: TeamMember[] = [
   },
   {
     id: '3',
-    name: 'Abhishek Raj',
+    name: 'Abishek Raj',
     role: 'CFO & Marketing Lead',
     bio: 'Strategic financial planning combined with data-driven marketing to maximize brand growth.',
+    // Replace the URL below with your actual hosted image URL
     avatarUrl: 'https://media.licdn.com/dms/image/v2/D4D03AQGbBvlDJiecJw/profile-displayphoto-crop_800_800/B4DZreDVFtIgAI-/0/1764662007357?e=1766016000&v=beta&t=77sMsgELEel7LQPyO2sMMptexPna7RzVvBfi0nZAspw',
     socials: { 
       linkedin: 'https://www.linkedin.com/in/abishek-raj-647809311/', 
@@ -236,3 +244,49 @@ export const PRICING: PricingTier[] = [
 ];
 
 export const TESTIMONIALS: Testimonial[] = [];
+
+export const PROCESS_STEPS = [
+  {
+    title: 'Discovery',
+    description: 'We meet to understand your goals, target audience, and functional requirements.',
+    icon: Search
+  },
+  {
+    title: 'Strategy & Design',
+    description: 'We create wireframes and high-fidelity mockups aligned with your brand identity.',
+    icon: PenTool
+  },
+  {
+    title: 'Development',
+    description: 'Our coding wizards build your site using the latest tech stack, ensuring speed and security.',
+    icon: Code
+  },
+  {
+    title: 'Launch & Scale',
+    description: 'We deploy your site, set up analytics, and provide ongoing support for growth.',
+    icon: Rocket
+  }
+];
+
+export const FAQS = [
+  {
+    question: "How long does a typical project take?",
+    answer: "For a standard 5-page website (Starter Plan), it typically takes 3-5 business days. Larger projects like E-commerce or Custom Apps can take 2-4 weeks depending on complexity."
+  },
+  {
+    question: "Do you provide hosting and domain services?",
+    answer: "Yes! We can handle domain registration and server setup. We recommend modern hosting solutions like Vercel or Netlify for best performance, but we can work with any provider."
+  },
+  {
+    question: "Can I update the website content myself?",
+    answer: "Absolutely. With our Professional and Business plans, we integrate a CMS (Content Management System) that allows you to edit text and images without touching code."
+  },
+  {
+    question: "Is there a maintenance fee?",
+    answer: "We offer free support for a limited time after launch (depending on your plan). After that, we offer optional monthly maintenance packages for security updates and content changes."
+  },
+  {
+    question: "What is your refund policy?",
+    answer: "We work in milestones. If you're not satisfied with the initial design phase, we offer a full refund. Once development begins, refunds are prorated based on work completed."
+  }
+];
