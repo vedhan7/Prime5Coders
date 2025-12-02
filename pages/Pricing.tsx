@@ -49,7 +49,7 @@ const Pricing: React.FC = () => {
               </div>
 
               <Link 
-                to="/contact"
+                to="/login"
                 className={`w-full block text-center py-3 rounded-lg font-semibold transition-all ${
                   tier.recommended
                     ? 'bg-[#4b6bfb] hover:bg-blue-600 text-white shadow-lg'

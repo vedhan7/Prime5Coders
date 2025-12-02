@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
             </button>
 
             <Link
-              to="/contact"
+              to="/login"
               className="px-5 py-2.5 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-semibold text-sm transition-all hover:shadow-[0_0_20px_rgba(75,107,251,0.5)]"
             >
               Get Started
@@ -121,7 +121,7 @@ const Navbar: React.FC = () => {
             ))}
             <div className="pt-4">
                 <Link
-                to="/contact"
+                to="/login"
                 className="block w-full text-center px-5 py-3 rounded-md bg-[#4b6bfb] text-white font-bold shadow-lg"
                 >
                 Get Started

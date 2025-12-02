@@ -12,6 +12,7 @@ import Services from './pages/Services';
 import Projects from './pages/Projects';
 import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
+import Login from './pages/Login';
 
 // Scroll to top helper
 const ScrollToTop = () => {
@@ -37,6 +38,7 @@ const App: React.FC = () => {
               <Route path="/projects" element={<Projects />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/login" element={<Login />} />
             </Routes>
           </main>
           <Footer />

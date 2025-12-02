@@ -75,7 +75,7 @@ const Services: React.FC = () => {
                 </a>
               ) : (
                 <Link 
-                  to="/contact" 
+                  to="/login" 
                   className="w-full block text-center py-3 rounded-lg border border-gray-300 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-900 dark:text-white font-semibold transition-colors"
                 >
                   Get a Quote
@@ -92,7 +92,7 @@ const Services: React.FC = () => {
                 Let's discuss how we can help your business grow with our technical expertise.
             </p>
             <Link 
-                to="/contact"
+                to="/login"
                 className="inline-block px-8 py-4 bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold rounded-full transition-all animate-glow shadow-md"
             >
                 Start Conversation

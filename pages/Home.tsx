@@ -40,10 +40,10 @@ const Home: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              to="/contact"
+              to="/login"
               className="px-8 py-4 rounded-full bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold text-lg transition-all animate-glow shadow-lg"
             >
-              Hire Prime5Coders
+              Order Your First Site
             </Link>
             <Link
               to="/projects"
