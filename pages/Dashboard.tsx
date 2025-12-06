@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { db } from '../services/firebase';
+import { collection, query, where, onSnapshot, addDoc, serverTimestamp, orderBy } from 'firebase/firestore';
 import { 
   LayoutDashboard, 
   Folder, 
@@ -10,11 +12,9 @@ import {
   Settings, 
   Bell, 
   CheckCircle, 
-  Clock, 
   AlertCircle,
   Download,
   CreditCard,
-  ExternalLink,
   ChevronRight,
   X,
   Plus,
@@ -22,45 +22,16 @@ import {
   Loader2
 } from 'lucide-react';
 
-// Mock Data
-const MOCK_PROJECTS = [
-  {
-    id: 1,
-    name: 'E-Commerce Platform Redesign',
-    status: 'In Progress',
-    progress: 75,
-    deadline: 'Oct 25, 2024',
-    tech: ['Next.js', 'Shopify'],
-    image: 'https://images.unsplash.com/photo-1661956602116-aa6865609028?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    id: 2,
-    name: 'Corporate Brand Identity',
-    status: 'Completed',
-    progress: 100,
-    deadline: 'Sep 10, 2024',
-    tech: ['Figma', 'React'],
-    image: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  }
-];
-
-const MOCK_INVOICES = [
-  { id: 'INV-2024-001', date: 'Sep 01, 2024', amount: '₹15,000', status: 'Paid' },
-  { id: 'INV-2024-002', date: 'Oct 01, 2024', amount: '₹15,000', status: 'Pending' },
-];
-
-const INITIAL_TICKETS = [
-  { id: 'TCK-102', subject: 'Payment Gateway Integration', status: 'Open', priority: 'High', date: '2 days ago' },
-  { id: 'TCK-099', subject: 'Update Footer Links', status: 'Resolved', priority: 'Low', date: '1 week ago' },
-];
-
 const Dashboard: React.FC = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   
-  // Ticket State
-  const [tickets, setTickets] = useState(INITIAL_TICKETS);
+  // Real Data State
+  const [projects, setProjects] = useState<any[]>([]);
+  const [invoices, setInvoices] = useState<any[]>([]);
+  const [tickets, setTickets] = useState<any[]>([]);
+  
   const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
   const [newTicket, setNewTicket] = useState({
     subject: '',
@@ -70,11 +41,56 @@ const Dashboard: React.FC = () => {
   const [isSubmittingTicket, setIsSubmittingTicket] = useState(false);
 
   useEffect(() => {
-    // In a real app, we would check loading state first
-    // For now, assuming if currentUser is null after render, redirect
     if (!currentUser) {
       navigate('/login');
+      return;
     }
+
+    // 1. Fetch Projects
+    const projectsQuery = query(
+        collection(db, 'projects'), 
+        where('userId', '==', currentUser.uid)
+    );
+    const unsubProjects = onSnapshot(projectsQuery, 
+        (snapshot) => {
+            const projData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setProjects(projData);
+        },
+        (error) => console.log("Projects listener:", error.code)
+    );
+
+    // 2. Fetch Invoices
+    const invoicesQuery = query(
+        collection(db, 'invoices'), 
+        where('userId', '==', currentUser.uid)
+    );
+    const unsubInvoices = onSnapshot(invoicesQuery, 
+        (snapshot) => {
+            const invData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setInvoices(invData);
+        },
+        (error) => console.log("Invoices listener:", error.code)
+    );
+
+    // 3. Fetch Tickets
+    const ticketsQuery = query(
+        collection(db, 'tickets'), 
+        where('userId', '==', currentUser.uid),
+        orderBy('createdAt', 'desc')
+    );
+    const unsubTickets = onSnapshot(ticketsQuery, 
+        (snapshot) => {
+            const tckData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setTickets(tckData);
+        },
+        (error) => console.log("Tickets listener:", error.code)
+    );
+
+    return () => {
+        unsubProjects();
+        unsubInvoices();
+        unsubTickets();
+    };
   }, [currentUser, navigate]);
 
   if (!currentUser) return null;
@@ -85,21 +101,26 @@ const Dashboard: React.FC = () => {
 
     setIsSubmittingTicket(true);
 
-    // Simulate API call
-    setTimeout(() => {
-        const ticket = {
-            id: `TCK-${Math.floor(Math.random() * 1000)}`,
+    try {
+        await addDoc(collection(db, 'tickets'), {
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
             subject: newTicket.subject,
-            status: 'Open',
+            description: newTicket.description,
             priority: newTicket.priority,
-            date: 'Just now'
-        };
+            status: 'Open',
+            createdAt: serverTimestamp(),
+            // Format a nice date for display fallback until serverTimestamp syncs
+            displayDate: new Date().toLocaleDateString()
+        });
 
-        setTickets([ticket, ...tickets]);
         setNewTicket({ subject: '', priority: 'Medium', description: '' });
         setIsSubmittingTicket(false);
         setIsTicketModalOpen(false);
-    }, 1000);
+    } catch (error) {
+        console.error("Error creating ticket", error);
+        setIsSubmittingTicket(false);
+    }
   };
 
   const renderContent = () => {
@@ -109,11 +130,11 @@ const Dashboard: React.FC = () => {
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Your Projects</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {MOCK_PROJECTS.map(project => (
+              {projects.map(project => (
                 <div key={project.id} className="glass-card p-6 rounded-2xl border border-gray-200 dark:border-white/5 hover:border-blue-500/30 transition-all">
                   <div className="flex justify-between items-start mb-4">
-                    <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-white/5 overflow-hidden">
-                        <img src={project.image} alt={project.name} className="w-full h-full object-cover" />
+                    <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-white/5 flex items-center justify-center">
+                        <Folder className="text-[#4b6bfb]" />
                     </div>
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                       project.status === 'Completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
@@ -123,7 +144,7 @@ const Dashboard: React.FC = () => {
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{project.name}</h3>
                   <div className="flex gap-2 mb-4">
-                    {project.tech.map(t => (
+                    {project.tech && project.tech.map((t: string) => (
                         <span key={t} className="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300">{t}</span>
                     ))}
                   </div>
@@ -138,6 +159,18 @@ const Dashboard: React.FC = () => {
                   </div>
                 </div>
               ))}
+              {projects.length === 0 && (
+                <div className="col-span-full text-center py-12 text-gray-500 dark:text-gray-400 glass-card rounded-2xl">
+                    <Folder size={48} className="mx-auto mb-4 opacity-20" />
+                    <p>No projects found.</p>
+                    <button 
+                        onClick={() => navigate('/pricing')}
+                        className="mt-4 text-[#4b6bfb] hover:underline"
+                    >
+                        Start a new project
+                    </button>
+                </div>
+              )}
             </div>
           </div>
         );
@@ -146,7 +179,7 @@ const Dashboard: React.FC = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Invoices & Billing</h2>
-                <button className="px-4 py-2 bg-[#4b6bfb] text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors">
+                <button className="px-4 py-2 bg-[#4b6bfb] text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors disabled:opacity-50" disabled={invoices.length === 0}>
                     Make Payment
                 </button>
             </div>
@@ -162,9 +195,9 @@ const Dashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-white/5">
-                  {MOCK_INVOICES.map(invoice => (
+                  {invoices.map(invoice => (
                     <tr key={invoice.id} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                      <td className="px-6 py-4 text-gray-900 dark:text-white font-medium">{invoice.id}</td>
+                      <td className="px-6 py-4 text-gray-900 dark:text-white font-medium">{invoice.displayId || invoice.id.substring(0,8)}</td>
                       <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{invoice.date}</td>
                       <td className="px-6 py-4 text-gray-900 dark:text-white font-bold">{invoice.amount}</td>
                       <td className="px-6 py-4">
@@ -181,6 +214,13 @@ const Dashboard: React.FC = () => {
                       </td>
                     </tr>
                   ))}
+                  {invoices.length === 0 && (
+                     <tr>
+                        <td colSpan={5} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                            No invoices found.
+                        </td>
+                     </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -208,10 +248,11 @@ const Dashboard: React.FC = () => {
                                 <div>
                                     <h4 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-[#4b6bfb] transition-colors">{ticket.subject}</h4>
                                     <div className="flex items-center gap-3 text-sm text-gray-500">
-                                        <span>ID: {ticket.id}</span>
+                                        <span>ID: {ticket.id.substring(0,8)}</span>
                                         <span>•</span>
-                                        <span>{ticket.date}</span>
+                                        <span>{ticket.displayDate || 'Recent'}</span>
                                     </div>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-1">{ticket.description}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4">
@@ -227,7 +268,7 @@ const Dashboard: React.FC = () => {
                         </div>
                     ))}
                     {tickets.length === 0 && (
-                        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                        <div className="text-center py-12 text-gray-500 dark:text-gray-400 glass-card rounded-2xl">
                             No tickets found. Need help? Create a new ticket.
                         </div>
                     )}
@@ -235,6 +276,11 @@ const Dashboard: React.FC = () => {
             </div>
         );
       default: // overview
+        const activeProjectsCount = projects.filter(p => p.status !== 'Completed').length;
+        const openTicketsCount = tickets.filter(t => t.status === 'Open').length;
+        // Basic calculation for outstanding - parsing currency strings would be better in a real app
+        const outstandingAmount = 0; 
+
         return (
           <div className="space-y-8">
             {/* Welcome & Stats */}
@@ -247,7 +293,7 @@ const Dashboard: React.FC = () => {
                             <Folder size={24} />
                         </div>
                     </div>
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">0</div>
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{activeProjectsCount}</div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">Active Projects</div>
                 </div>
 
@@ -258,7 +304,7 @@ const Dashboard: React.FC = () => {
                         </div>
                         <span className="text-xs font-bold bg-green-100 text-green-700 px-2 py-1 rounded dark:bg-green-900/30 dark:text-green-400">All Paid</span>
                     </div>
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">₹0</div>
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">₹{outstandingAmount}</div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">Outstanding Invoice</div>
                 </div>
 
@@ -268,27 +314,44 @@ const Dashboard: React.FC = () => {
                             <MessageSquare size={24} />
                         </div>
                     </div>
-                    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{tickets.filter(t => t.status === 'Open').length}</div>
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{openTicketsCount}</div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">Open Tickets</div>
                 </div>
               </div>
             </div>
 
             {/* Active Project Highlight - Empty State */}
-            <div className="glass-card p-8 rounded-2xl border border-gray-200 dark:border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center min-h-[200px]">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-                
-                <div className="relative z-10">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No Active Projects</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">You don't have any ongoing projects at the moment.</p>
-                    <button 
-                        onClick={() => navigate('/pricing')}
-                        className="px-6 py-2.5 bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold rounded-full transition-all shadow-lg"
-                    >
-                        Start New Project
-                    </button>
+            {activeProjectsCount === 0 ? (
+                <div className="glass-card p-8 rounded-2xl border border-gray-200 dark:border-white/5 relative overflow-hidden text-center flex flex-col items-center justify-center min-h-[200px]">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+                    
+                    <div className="relative z-10">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No Active Projects</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-6">You don't have any ongoing projects at the moment.</p>
+                        <button 
+                            onClick={() => navigate('/pricing')}
+                            className="px-6 py-2.5 bg-[#4b6bfb] hover:bg-blue-600 text-white font-bold rounded-full transition-all shadow-lg"
+                        >
+                            Start New Project
+                        </button>
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <div className="glass-card p-6 rounded-2xl border border-gray-200 dark:border-white/5">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Current Projects</h3>
+                    {projects.filter(p => p.status !== 'Completed').map(p => (
+                        <div key={p.id} className="mb-4 last:mb-0">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="font-semibold text-gray-800 dark:text-gray-200">{p.name}</span>
+                                <span className="text-sm text-[#4b6bfb]">{p.progress}%</span>
+                            </div>
+                             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div className="bg-[#4b6bfb] h-2 rounded-full transition-all duration-1000" style={{ width: `${p.progress}%` }}></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
             
             {/* Recent Activity */}
              <div>
@@ -302,7 +365,7 @@ const Dashboard: React.FC = () => {
                             </div>
                             <div>
                                 <p className="text-gray-900 dark:text-white font-medium">Account Created</p>
-                                <p className="text-sm text-gray-500">Just now</p>
+                                <p className="text-sm text-gray-500">Welcome to Prime5Coders!</p>
                             </div>
                         </div>
                     </div>

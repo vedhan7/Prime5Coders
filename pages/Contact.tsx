@@ -99,7 +99,7 @@ const Contact: React.FC = () => {
           email: formState.email,
           phone: formState.phone,
           budget: formState.budget,
-          message: formState.details, // Saving as 'message' to match your requested structure
+          message: formState.details,
           createdAt: serverTimestamp(),
         });
 
@@ -107,7 +107,7 @@ const Contact: React.FC = () => {
         if (analytics) {
           logEvent(analytics, 'generate_lead', {
             currency: 'INR',
-            value: formState.budget === 'under-2k' ? 1000 : 5000, // Approximate value estimation
+            value: formState.budget === 'under-2k' ? 1000 : 5000, 
             budget_range: formState.budget
           });
         }
@@ -116,12 +116,22 @@ const Contact: React.FC = () => {
         setFormState({ name: '', email: '', phone: '', budget: '', details: '' });
         setErrors({});
         
-        // Reset success message after 3 seconds
         setTimeout(() => setStatus('idle'), 3000);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error saving message:", error);
+
         setStatus('error');
-        setErrors(prev => ({...prev, form: "Failed to send message. Please try again later."}));
+        
+        let errorMsg = "Failed to send message.";
+        if (error.code === 'unavailable') {
+            errorMsg = "Network Error: Please check your internet connection.";
+        } else if (error.code === 'permission-denied') {
+            errorMsg = "Access Denied: Please check database permissions.";
+        } else if (error.message) {
+            errorMsg = `Error: ${error.message}`;
+        }
+        
+        setErrors(prev => ({...prev, form: errorMsg}));
       }
     }
   };
@@ -133,7 +143,6 @@ const Contact: React.FC = () => {
       [name]: value
     });
 
-    // Clear error when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors({
         ...errors,
@@ -158,14 +167,14 @@ const Contact: React.FC = () => {
               <div className="flex items-start space-x-4">
                 <div 
                   ref={(el) => { if(el) iconRefs.current[0] = el; }}
-                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] hover:text-blue-400 hover:scale-110 shadow-sm dark:shadow-none transition-all duration-700 hover:duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 cursor-default"
+                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] hover:text-blue-400 hover:scale-110 hover:shadow-[0_0_15px_rgba(75,107,251,0.4)] shadow-sm dark:shadow-none transition-all duration-700 hover:duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 cursor-default"
                 >
                   <Mail size={24} />
                 </div>
                 <div>
                   <h3 className="text-gray-900 dark:text-white font-semibold mb-1">Email Us</h3>
-                  <a href="mailto:contact@prime5coders.com" className="text-gray-600 hover:text-[#4b6bfb] dark:text-gray-400 dark:hover:text-[#4b6bfb] transition-colors">
-                    contact@prime5coders.com
+                  <a href="mailto:vedhanmail@gmail.com" className="text-gray-600 hover:text-[#4b6bfb] dark:text-gray-400 dark:hover:text-[#4b6bfb] transition-colors">
+                    vedhanmail@gmail.com
                   </a>
                 </div>
               </div>
@@ -173,13 +182,13 @@ const Contact: React.FC = () => {
               <div className="flex items-start space-x-4">
                  <div 
                   ref={(el) => { if(el) iconRefs.current[1] = el; }}
-                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] hover:text-blue-400 hover:scale-110 shadow-sm dark:shadow-none transition-all duration-700 hover:duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 cursor-default delay-100"
+                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] hover:text-blue-400 hover:scale-110 hover:shadow-[0_0_15px_rgba(75,107,251,0.4)] shadow-sm dark:shadow-none transition-all duration-700 hover:duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 cursor-default delay-100"
                  >
                   <Phone size={24} />
                 </div>
                 <div>
                   <h3 className="text-gray-900 dark:text-white font-semibold mb-1">Call Us</h3>
-                  <p className="text-gray-600 dark:text-gray-400">+1 (555) 123-4567</p>
+                  <p className="text-gray-600 dark:text-gray-400">+91 82486 56311</p>
                   <a href="#" className="text-sm text-[#4b6bfb] hover:underline mt-1 block">Chat on WhatsApp</a>
                 </div>
               </div>
@@ -187,13 +196,13 @@ const Contact: React.FC = () => {
                <div className="flex items-start space-x-4">
                  <div 
                   ref={(el) => { if(el) iconRefs.current[2] = el; }}
-                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] hover:text-blue-400 hover:scale-110 shadow-sm dark:shadow-none transition-all duration-700 hover:duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 cursor-default delay-200"
+                  className="w-12 h-12 rounded-lg bg-blue-50 dark:bg-white/5 flex items-center justify-center text-[#4b6bfb] hover:text-blue-400 hover:scale-110 hover:shadow-[0_0_15px_rgba(75,107,251,0.4)] shadow-sm dark:shadow-none transition-all duration-700 hover:duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] opacity-0 scale-0 cursor-default delay-200"
                  >
                   <MapPin size={24} />
                 </div>
                 <div>
                   <h3 className="text-gray-900 dark:text-white font-semibold mb-1">Visit Us</h3>
-                  <p className="text-gray-600 dark:text-gray-400">123 Tech Avenue, Silicon Valley<br />San Francisco, CA 94107</p>
+                  <p className="text-gray-600 dark:text-gray-400">Madurai, India</p>
                 </div>
               </div>
             </div>
@@ -204,9 +213,10 @@ const Contact: React.FC = () => {
             {errors.form && (
               <div className="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm flex items-start">
                 <AlertCircle size={18} className="mt-0.5 mr-2 flex-shrink-0" />
-                {errors.form}
+                <span className="break-words">{errors.form}</span>
               </div>
             )}
+            
             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name <span className="text-red-500">*</span></label>

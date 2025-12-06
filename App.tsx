@@ -4,6 +4,7 @@ import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTopButton from './components/ScrollToTopButton';
+import CursorFollower from './components/CursorFollower';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { logEvent } from 'firebase/analytics';
@@ -18,6 +19,8 @@ import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import NotFound from './pages/NotFound';
 
 // Route observer for ScrollToTop and Analytics
 const RouteObserver = () => {
@@ -45,7 +48,8 @@ const App: React.FC = () => {
       <AuthProvider>
         <HashRouter>
           <RouteObserver />
-          <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900 dark:bg-[#050816] dark:text-white transition-colors duration-300">
+          <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900 dark:bg-[#050816] dark:text-white transition-colors duration-300 cursor-default">
+            <CursorFollower />
             <Navbar />
             <main className="flex-grow">
               <Routes>
@@ -57,6 +61,8 @@ const App: React.FC = () => {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
             <Footer />

@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Command, Sun, Moon, LogOut, User, LayoutDashboard } from 'lucide-react';
+import { Menu, X, Sun, Moon, LogOut, User, LayoutDashboard, Shield } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { ADMIN_EMAILS } from '../constants';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,11 +45,13 @@ const Navbar: React.FC = () => {
     { name: 'Contact', path: '/contact' },
   ];
 
+  const isAdmin = currentUser && currentUser.email && ADMIN_EMAILS.includes(currentUser.email);
+
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-white/80 dark:bg-[#050816]/90 backdrop-blur-md border-b border-gray-200 dark:border-white/5 py-4 shadow-sm dark:shadow-none' 
+          ? 'bg-white/70 dark:bg-[#050816]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/10 py-4 shadow-sm' 
           : 'bg-transparent py-6'
       }`}
     >
@@ -56,9 +59,11 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 flex items-center justify-center text-white font-bold transform group-hover:rotate-12 transition-transform shadow-lg">
-              <Command size={24} />
-            </div>
+            <img 
+                src="https://www2.online-converting.com/upload/api_e9963a9052/result.jpg" 
+                alt="Prime5Coders Logo" 
+                className="w-10 h-10 object-contain transform group-hover:rotate-12 transition-transform drop-shadow-lg"
+            />
             <span className="text-2xl font-bold text-gray-900 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-white dark:to-gray-400">
               Prime5Coders
             </span>
@@ -91,15 +96,26 @@ const Navbar: React.FC = () => {
 
             {currentUser ? (
               <div className="flex items-center gap-4">
-                 <Link 
-                    to="/dashboard"
-                    className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-[#4b6bfb] ${
-                        location.pathname === '/dashboard' ? 'text-[#4b6bfb]' : 'text-gray-600 dark:text-gray-300'
-                    }`}
-                 >
-                    <LayoutDashboard size={18} />
-                    <span className="hidden lg:inline">Dashboard</span>
-                 </Link>
+                 {isAdmin && (
+                    <Link
+                      to="/admin"
+                      className="p-2 text-red-500 hover:text-red-600 transition-colors"
+                      title="Admin Dashboard"
+                    >
+                      <Shield size={20} />
+                    </Link>
+                 )}
+                 {!isAdmin && (
+                    <Link 
+                        to="/dashboard"
+                        className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-[#4b6bfb] ${
+                            location.pathname === '/dashboard' ? 'text-[#4b6bfb]' : 'text-gray-600 dark:text-gray-300'
+                        }`}
+                    >
+                        <LayoutDashboard size={18} />
+                        <span className="hidden lg:inline">Dashboard</span>
+                    </Link>
+                 )}
                  <span className="text-sm text-gray-600 dark:text-gray-300 hidden xl:block flex items-center gap-2">
                     <User size={16} />
                     {currentUser.displayName?.split(' ')[0] || 'User'}
@@ -169,15 +185,28 @@ const Navbar: React.FC = () => {
                         <div className="px-3 py-2 text-gray-500 dark:text-gray-400 text-sm">
                             Signed in as {currentUser.email}
                         </div>
-                        <Link
-                            to="/dashboard"
-                            className="block px-3 py-3 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#4b6bfb] dark:hover:text-white mb-2"
-                        >
-                            <div className="flex items-center gap-2">
-                                <LayoutDashboard size={18} />
-                                Dashboard
-                            </div>
-                        </Link>
+                        {isAdmin && (
+                            <Link
+                                to="/admin"
+                                className="block px-3 py-3 rounded-md text-base font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 mb-2"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <Shield size={18} />
+                                    Admin Portal
+                                </div>
+                            </Link>
+                        )}
+                        {!isAdmin && (
+                            <Link
+                                to="/dashboard"
+                                className="block px-3 py-3 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#4b6bfb] dark:hover:text-white mb-2"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <LayoutDashboard size={18} />
+                                    Dashboard
+                                </div>
+                            </Link>
+                        )}
                          <Link
                             to="/pricing"
                             className="block w-full text-center px-5 py-3 rounded-md bg-[#4b6bfb] text-white font-bold shadow-lg mb-3 animate-glow"

@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Code2, Database, Layers, Cpu } from 'lucide-react';
 import { SERVICES, PROJECTS } from '../constants';
 import ThreeBackground from '../components/ThreeBackground';
 import { useAuth } from '../context/AuthContext';
@@ -33,6 +33,11 @@ const Home: React.FC = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  const TECH_STACK = [
+    "React", "TypeScript", "Next.js", "Three.js", "Firebase", "Node.js", 
+    "Tailwind CSS", "PostgreSQL", "GraphQL", "Framer Motion", "Stripe", "Docker", "AWS", "Figma"
+  ];
 
   return (
     <div className="overflow-hidden">
@@ -71,6 +76,33 @@ const Home: React.FC = () => {
               View Our Work
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Tech Stack Marquee */}
+      <section className="py-12 border-y border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-[#0a0f1e]/50 backdrop-blur-sm overflow-hidden">
+        <div className="mb-6 text-center">
+            <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Powered by Modern Tech</p>
+        </div>
+        
+        {/* Row 1: Scrolling Left */}
+        <div className="relative flex overflow-x-hidden group mb-4">
+            <div className="animate-scroll flex space-x-8 whitespace-nowrap py-2 px-4">
+                {[...TECH_STACK, ...TECH_STACK].map((tech, i) => (
+                    <span key={i} className="inline-flex items-center px-6 py-2 rounded-full glass-card border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 font-medium text-sm">
+                        <Code2 size={16} className="mr-2 text-[#4b6bfb]" />
+                        {tech}
+                    </span>
+                ))}
+            </div>
+            <div className="absolute top-0 animate-scroll flex space-x-8 whitespace-nowrap py-2 px-4" aria-hidden="true">
+                {[...TECH_STACK, ...TECH_STACK].map((tech, i) => (
+                    <span key={`dup-${i}`} className="inline-flex items-center px-6 py-2 rounded-full glass-card border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 font-medium text-sm">
+                        <Code2 size={16} className="mr-2 text-[#4b6bfb]" />
+                        {tech}
+                    </span>
+                ))}
+            </div>
         </div>
       </section>
 

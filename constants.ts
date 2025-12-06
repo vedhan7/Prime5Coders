@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 import { Service, Project, TeamMember, PricingTier, Testimonial } from './types';
 
+export const ADMIN_EMAILS = ['admin@prime5coders.com', 'vedhan7@gmail.com'];
+
 export const SERVICES: Service[] = [
   {
     id: 'web-dev',
@@ -133,8 +135,8 @@ export const PROJECTS: Project[] = [
     category: 'E-Commerce',
     description: 'A modern furniture store with 3D product previews and AR capabilities.',
     techStack: ['Next.js', 'Three.js', 'Stripe', 'PostgreSQL'],
-    imageUrl: 'blob:null/1afab153-b29a-4ee6-a26c-2eb36b2fa7ab',
-    liveLink: 'https://www.qandle.com/blog/wp-content/uploads/2024/07/AI-Based-Attendance-System-scaled.jpeg',
+    imageUrl: 'https://premier-consultancy.com/wp-content/uploads/2023/10/Smart-Attendance-System-1.png',
+    liveLink: 'https://byteforce-attendance-dashboard-415273004224.us-west1.run.app/',
     githubLink: 'https://github.com/vedhan7/SMART-ATTENDANCE'
   },
   {
@@ -196,6 +198,7 @@ export const TEAM: TeamMember[] = [
       github: '#' 
     }
   }
+ 
 ];
 
 export const PRICING: PricingTier[] = [

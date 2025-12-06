@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, Command, Chrome, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Chrome, AlertCircle, Loader2 } from 'lucide-react';
 import { auth, googleProvider, analytics } from '../services/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 import { logEvent } from 'firebase/analytics';
 import { useAuth } from '../context/AuthContext';
+import { ADMIN_EMAILS } from '../constants';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -18,7 +19,11 @@ const Login: React.FC = () => {
   // Redirect if user is already logged in
   useEffect(() => {
     if (currentUser) {
-        navigate('/pricing');
+        if (currentUser.email && ADMIN_EMAILS.includes(currentUser.email)) {
+            navigate('/admin');
+        } else {
+            navigate('/pricing');
+        }
     }
   }, [currentUser, navigate]);
 
@@ -135,9 +140,11 @@ const Login: React.FC = () => {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <Link to="/" className="inline-flex items-center space-x-2 group mb-6">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-500 flex items-center justify-center text-white font-bold transform group-hover:rotate-12 transition-transform shadow-lg">
-              <Command size={28} />
-            </div>
+            <img 
+                src="https://cdn-icons-png.flaticon.com/512/6062/6062646.png" 
+                alt="Prime5Coders Logo" 
+                className="w-12 h-12 object-contain transform group-hover:rotate-12 transition-transform drop-shadow-lg"
+            />
           </Link>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
             Welcome back
